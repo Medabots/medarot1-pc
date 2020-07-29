@@ -1,0 +1,16 @@
+*.gb
+*.sav
+*.sgm
+build/
+*.sn*
+*.sna
+*.o
+.vscode/
+scripts/common/__pycache__/
+*.ips
+*.pyc
+*.map
+*.sym
+
+# OSX
+.DS_Store
