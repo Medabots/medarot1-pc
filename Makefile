@@ -5,6 +5,8 @@ VERSIONS := parts_collection
 OUTPUT_PREFIX := medarot_
 ORIGINAL_PREFIX := baserom_
 
+PYTHON := python3
+
 # Types
 ROM_TYPE := gb
 SYM_TYPE := sym
@@ -17,12 +19,16 @@ INT_TYPE := o
 BASE := .
 BUILD := $(BASE)/build
 GAME := $(BASE)/game
-SRC := $(GAME)/src
+SCRIPT := $(BASE)/scripts
+TEXT := $(BASE)/text
 COMMON := $(SRC)/common
+SRC := $(GAME)/src
+TILESET_BIN := $(GAME)/tilesets
+TILESET_TEXT := $(TEXT)/tilesets
 
 
 # Source Modules (directories in SRC)
-MODULES := core
+MODULES := core gfx
 
 # Toolchain
 CC := rgbasm
@@ -57,7 +63,7 @@ OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
 # core_main_ADDITIONAL :=
 shared_ADDITIONAL := 
 
-.PHONY: all clean default dump $(VERSIONS)
+.PHONY: all clean default dump dump_tilesets $(VERSIONS)
 default: parts_collection
 all: $(VERSIONS)
 
@@ -83,8 +89,17 @@ $(BUILD)/%.$(INT_TYPE): $(SRC)/$$(firstword $$(subst ., ,$$*))/$$(lastword $$(su
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
-dump:
+dump: dump_tilesets
+
+dump_tilesets: | $(TILESET_TEXT) $(TILESET_BIN)
+	$(PYTHON) $(SCRIPT)/dump_tilesets.py
 
 #Make directories if necessary
 $(BUILD):
 	mkdir -p $(BUILD)
+
+$(TILESET_BIN):
+	mkdir -p $(TILESET_BIN)
+
+$(TILESET_TEXT):
+	mkdir -p $(TILESET_TEXT)
