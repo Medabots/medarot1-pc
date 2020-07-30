@@ -52,6 +52,12 @@ TilesetStart11A3::
   INCBIN "build/tilesets/11A3.malias"
 TilesetEnd11A3::
 
+SECTION "Tileset Data 11A8", ROMX[$7DC2], BANK[$08]
+Tileset11A8::
+TilesetStart11A8::
+  INCBIN "build/tilesets/11A8.malias"
+TilesetEnd11A8::
+
 SECTION "Tileset Data 11AD", ROMX[$46F2], BANK[$08]
 Tileset11AD::
 TilesetStart11AD::
@@ -112,11 +118,65 @@ TilesetStart11DA::
   INCBIN "build/tilesets/11DA.malias"
 TilesetEnd11DA::
 
+SECTION "Tileset Data 11DF", ROMX[$43BC], BANK[$12]
+Tileset11DF::
+TilesetStart11DF::
+  INCBIN "build/tilesets/11DF.malias"
+TilesetEnd11DF::
+
+SECTION "Tileset Data 11E4", ROMX[$499C], BANK[$12]
+Tileset11E4::
+TilesetStart11E4::
+  INCBIN "build/tilesets/11E4.malias"
+TilesetEnd11E4::
+
+SECTION "Tileset Data 11E9", ROMX[$4F6F], BANK[$12]
+Tileset11E9::
+TilesetStart11E9::
+  INCBIN "build/tilesets/11E9.malias"
+TilesetEnd11E9::
+
 SECTION "Tileset Data 11EE", ROMX[$56D5], BANK[$12]
 Tileset11EE::
 TilesetStart11EE::
   INCBIN "build/tilesets/11EE.malias"
 TilesetEnd11EE::
+
+SECTION "Tileset Data 11F3", ROMX[$5D51], BANK[$12]
+Tileset11F3::
+TilesetStart11F3::
+  INCBIN "build/tilesets/11F3.malias"
+TilesetEnd11F3::
+
+SECTION "Tileset Data 11F8", ROMX[$5ECF], BANK[$12]
+Tileset11F8::
+TilesetStart11F8::
+  INCBIN "build/tilesets/11F8.malias"
+TilesetEnd11F8::
+
+SECTION "Tileset Data 11FD", ROMX[$6091], BANK[$12]
+Tileset11FD::
+TilesetStart11FD::
+  INCBIN "build/tilesets/11FD.malias"
+TilesetEnd11FD::
+
+SECTION "Tileset Data 1202", ROMX[$623C], BANK[$12]
+Tileset1202::
+TilesetStart1202::
+  INCBIN "build/tilesets/1202.malias"
+TilesetEnd1202::
+
+SECTION "Tileset Data 1207", ROMX[$62C3], BANK[$12]
+Tileset1207::
+TilesetStart1207::
+  INCBIN "build/tilesets/1207.malias"
+TilesetEnd1207::
+
+SECTION "Tileset Data 120C", ROMX[$6EF4], BANK[$12]
+Tileset120C::
+TilesetStart120C::
+  INCBIN "build/tilesets/120C.malias"
+TilesetEnd120C::
 
 SECTION "Tileset Data 1211", ROMX[$4000], BANK[$09]
 Tileset1211::
