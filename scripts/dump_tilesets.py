@@ -7,7 +7,7 @@ from functools import partial
 from pathlib import Path
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
-from common import utils, tilesets
+from common import utils, tilesets, png, gfx
 
 nametable = {}
 namefile = None
@@ -41,9 +41,19 @@ with open("baserom_parts_collection.gb", "rb") as rom, open("game/src/gfx/tilese
 	output.write("TilesetTableEnd::\n");
 	with open("game/src/gfx/tileset_files.asm", "w") as outputf:
 		for ptr in sorted(data):
-			with open("game/tilesets/{}.malias".format(data[ptr][3]),"wb") as compressed, open("text/tilesets/{}.2bpp".format(data[ptr][3]),"wb") as uncompressed:
+			with open("game/tilesets/{}.malias".format(data[ptr][3]),"wb") as compressed, \
+					open("text/tilesets/{}.png".format(data[ptr][3]),"wb") as uncompressed:
 				f = tilesets.decompress_tileset(rom, utils.rom2realaddr((data[ptr][0],data[ptr][1])))
-				uncompressed.write(bytearray(f[0]))
+				width, height, palette, greyscale, bitdepth, px_map = gfx.convert_2bpp_to_png(f[0])
+				w = png.Writer(
+					width,
+					height,
+					palette=palette,
+					compression=9,
+					greyscale=greyscale,
+					bitdepth=bitdepth
+				)
+				w.write(uncompressed, px_map)
 				compressed.write(bytearray(f[1]))
 				output.write('SECTION "TilesetInfo {0}", ROM0[${1:04X}]\n'.format(data[ptr][3], ptr))
 				output.write("TilesetInfo{}::\n".format(data[ptr][3]))
