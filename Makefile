@@ -5,6 +5,8 @@ VERSIONS := parts_collection
 OUTPUT_PREFIX := medarot_
 ORIGINAL_PREFIX := baserom_
 
+PYTHON := python3
+
 # Types
 ROM_TYPE := gb
 SYM_TYPE := sym
@@ -13,16 +15,32 @@ MAP_TYPE := map
 SOURCE_TYPE := asm
 INT_TYPE := o
 
+RAW_TSET_SRC_TYPE := png
+TSET_SRC_TYPE := 2bpp
+TSET_TYPE := malias
+
 # Directories
 BASE := .
 BUILD := $(BASE)/build
 GAME := $(BASE)/game
+TEXT := $(BASE)/text
+SCRIPT := $(BASE)/scripts
+
+# Build Directories
+TILESET_OUT := $(BUILD)/tilesets
+
+# Game Source Directories
 SRC := $(GAME)/src
+TILESET_BIN := $(GAME)/tilesets
 COMMON := $(SRC)/common
+
+# Text Directories
+TILESET_TEXT := $(TEXT)/tilesets
+
 
 
 # Source Modules (directories in SRC)
-MODULES := core
+MODULES := core gfx
 
 # Toolchain
 CC := rgbasm
@@ -49,15 +67,20 @@ MAP_OUT := $(foreach VERSION,$(VERSIONS),$(BASE)/$(OUTPUT_PREFIX)$(VERSION).$(MA
 OBJNAMES := $(foreach MODULE,$(MODULES),$(addprefix $(MODULE)., $(addsuffix .$(INT_TYPE), $(notdir $(basename $(wildcard $(SRC)/$(MODULE)/*.$(SOURCE_TYPE)))))))
 COMMON_SRC := $(wildcard $(COMMON)/*.$(SOURCE_TYPE))
 
+TILESETS := $(notdir $(basename $(wildcard $(TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE))))
+
 # Intermediates
 OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
+
+TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
 # core_main_ADDITIONAL :=
 shared_ADDITIONAL := 
+gfx_ADDITIONAL := $(TILESET_FILES)
 
-.PHONY: all clean default dump $(VERSIONS)
+.PHONY: all clean default dump dump_tilesets $(VERSIONS)
 default: parts_collection
 all: $(VERSIONS)
 
@@ -80,11 +103,31 @@ $(BASE)/$(OUTPUT_PREFIX)%.$(ROM_TYPE): $(OBJECTS) $$(addprefix $(BUILD)/$$*., $$
 $(BUILD)/%.$(INT_TYPE): $(SRC)/$$(firstword $$(subst ., ,$$*))/$$(lastword $$(subst ., ,$$*)).$(SOURCE_TYPE) $(COMMON_SRC) $(shared_ADDITIONAL) $$(wildcard $(SRC)/$$(firstword $$(subst ., ,$$*))/include/*.$(SOURCE_TYPE)) $$($$(firstword $$(subst ., ,$$*))_ADDITIONAL) $$($$(firstword $$(subst ., ,$$*))_$$(lastword $$(subst ., ,$$*))_ADDITIONAL) | $(BUILD)
 	$(CC) $(CC_ARGS) -DGAMEVERSION=$(CURVERSION) -o $@ $<
 
+# build/tilesets/*.malias from built 2bpp
+$(TILESET_OUT)/%.$(TSET_TYPE): $(TILESET_OUT)/%.$(TSET_SRC_TYPE) | $(TILESET_OUT)
+	$(PYTHON) $(SCRIPT)/tileset2malias.py $< $@
+
+# build/tilesets/*.2bpp from source png
+$(TILESET_OUT)/%.$(TSET_SRC_TYPE): $(TILESET_TEXT)/%.$(RAW_TSET_SRC_TYPE) | $(TILESET_OUT)
+	$(CCGFX) $(CCGFX_ARGS) -d 2 -o $@ $<
+
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
-dump:
+dump: dump_tilesets
+
+dump_tilesets: | $(TILESET_TEXT) $(TILESET_BIN)
+	$(PYTHON) $(SCRIPT)/dump_tilesets.py
 
 #Make directories if necessary
 $(BUILD):
 	mkdir -p $(BUILD)
+
+$(TILESET_BIN):
+	mkdir -p $(TILESET_BIN)
+
+$(TILESET_TEXT):
+	mkdir -p $(TILESET_TEXT)
+
+$(TILESET_OUT):
+	mkdir -p $(TILESET_OUT)
