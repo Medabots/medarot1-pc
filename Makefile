@@ -36,11 +36,10 @@ COMMON := $(SRC)/common
 
 # Text Directories
 TILESET_TEXT := $(TEXT)/tilesets
-
-
+DIALOG_TEXT := $(TEXT)/dialog
 
 # Source Modules (directories in SRC)
-MODULES := core gfx
+MODULES := core gfx story
 
 # Toolchain
 CC := rgbasm
@@ -80,7 +79,7 @@ TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 shared_ADDITIONAL := 
 gfx_ADDITIONAL := $(TILESET_FILES)
 
-.PHONY: all clean default dump dump_tilesets $(VERSIONS)
+.PHONY: $(VERSIONS) all clean default dump dump_tilesets dump_text
 default: parts_collection
 all: $(VERSIONS)
 
@@ -117,7 +116,10 @@ clean:
 dump: dump_tilesets
 
 dump_tilesets: | $(TILESET_TEXT) $(TILESET_BIN)
-	$(PYTHON) $(SCRIPT)/dump_tilesets.py
+	$(PYTHON) $(SCRIPT)/dump_tilesets.py	
+
+dump_text: | $(DIALOG_TEXT)
+	$(PYTHON) $(SCRIPT)/dump_text.py
 
 #Make directories if necessary
 $(BUILD):
@@ -131,3 +133,6 @@ $(TILESET_TEXT):
 
 $(TILESET_OUT):
 	mkdir -p $(TILESET_OUT)
+
+$(DIALOG_TEXT):
+	mkdir -p $(DIALOG_TEXT)

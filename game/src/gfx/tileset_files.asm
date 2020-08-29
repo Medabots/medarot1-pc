@@ -10,17 +10,17 @@ TilesetStart1180::
   INCBIN "build/tilesets/1180.malias"
 TilesetEnd1180::
 
-SECTION "Tileset Data 1185", ROMX[$4000], BANK[$08]
-Tileset1185::
-TilesetStart1185::
-  INCBIN "build/tilesets/1185.malias"
-TilesetEnd1185::
+SECTION "Tileset Data MainSpecial", ROMX[$4000], BANK[$08]
+TilesetMainSpecial::
+TilesetStartMainSpecial::
+  INCBIN "build/tilesets/MainSpecial.malias"
+TilesetEndMainSpecial::
 
-SECTION "Tileset Data 118A", ROMX[$4169], BANK[$08]
-Tileset118A::
-TilesetStart118A::
-  INCBIN "build/tilesets/118A.malias"
-TilesetEnd118A::
+SECTION "Tileset Data MainDialog", ROMX[$4169], BANK[$08]
+TilesetMainDialog::
+TilesetStartMainDialog::
+  INCBIN "build/tilesets/MainDialog.malias"
+TilesetEndMainDialog::
 
 SECTION "Tileset Data 118F", ROMX[$60B4], BANK[$08]
 Tileset118F::
