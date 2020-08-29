@@ -113,7 +113,7 @@ $(TILESET_OUT)/%.$(TSET_SRC_TYPE): $(TILESET_TEXT)/%.$(RAW_TSET_SRC_TYPE) | $(TI
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
-dump: dump_tilesets
+dump: dump_tilesets dump_text
 
 dump_tilesets: | $(TILESET_TEXT) $(TILESET_BIN)
 	$(PYTHON) $(SCRIPT)/dump_tilesets.py	

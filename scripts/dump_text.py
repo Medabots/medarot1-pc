@@ -142,7 +142,7 @@ for info in rom_info:
                 pointers[p] = t
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
-                writer = csv.writer(fp, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(["Pointer[#version]","Original"])
                 for p in pointers:
                     writer.writerow([hex(p), pointers[p]])
