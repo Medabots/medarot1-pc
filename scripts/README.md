@@ -84,5 +84,10 @@ Will override things in a translation branch, so should normally be avoided.
 
 ## xxxx2yyyy.py
 
-Conversion scripts from format 'xxxx' to 'yyyy'. Example: ptrlist2asm.py converts ptrlist text files into asm files for use when building.
+Conversion scripts from format 'xxxx' to 'yyyy'. 
 
+Examples:
+
+* ptrlist2asm.py converts ptrlist text files into asm files for use when building.
+
+* tileset2malias.py converts tileset png files into malias compressed files for use when building.
