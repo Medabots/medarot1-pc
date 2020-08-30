@@ -85,7 +85,7 @@ shared_ADDITIONAL :=
 gfx_ADDITIONAL := $(TILESET_FILES)
 data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
 
-.PHONY: $(VERSIONS) all clean default dump dump_tilesets dump_text
+.PHONY: $(VERSIONS) all clean default
 default: parts_collection
 all: $(VERSIONS)
 
@@ -124,7 +124,11 @@ $(PTRLISTS_OUT)/%.$(SOURCE_TYPE): $(PTRLISTS_TEXT)/$$(word 1, $$(subst _, ,$$*))
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
-dump: dump_tilesets dump_text dump_ptrlists
+.PHONY: dump_tilesets dump_text dump_ptrlists dump_free
+dump: dump_tilesets dump_text dump_ptrlists dump_free
+
+dump_free:
+	$(PYTHON) $(SCRIPT)/dump_bank_free_end.py
 
 dump_tilesets: | $(TILESET_TEXT) $(TILESET_BIN)
 	$(PYTHON) $(SCRIPT)/dump_tilesets.py	
