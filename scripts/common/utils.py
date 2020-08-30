@@ -7,6 +7,9 @@ def merge_dicts(dict_list):
         result.update(dictionary)
     return result
 
+def reverse_dict(d):
+    return dict((v,k) for k,v in d.items())
+
 def bin2txt(bin, tbl):
     tilemap = []
     for b in bin:
@@ -55,7 +58,7 @@ def read_short(rom):
 def read_byte(rom):
     return struct.unpack("B", rom.read(1))[0]
 
-def read_table(filename, reverse = False, keystring=False):
+def read_table(filename, reverse=False, keystring=False):
     table = {}
     with open(filename, 'r', encoding='utf-8') as f:
         if reverse:

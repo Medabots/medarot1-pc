@@ -6,7 +6,7 @@
 import os, sys
 from functools import partial
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
-from common import utils
+from common import utils, tilesets
 
 list_map = ({
 	# 'Type' : (Start of Pointers, Terminator, Number of Items, Prefix Length)
@@ -19,7 +19,12 @@ list_map = ({
 	'Medarotters' : ((0x17, 0x63e2), 0x50, 80, 3),
 })
 
-tileset = utils.merge_dicts([utils.read_table("scripts/res/tileset_MainSpecial.tbl"), utils.read_table("scripts/res/tileset_MainDialog.tbl"), utils.read_table("scripts/res/tileset_dakuten.tbl")])
+tileset = utils.merge_dicts([
+            tilesets.get_tileset("MainSpecial"),
+            tilesets.get_tileset("MainDialog"),
+            tilesets.get_tileset("dakuten", override_offset=0x0)
+        ])
+
 with open("baserom_parts_collection.gb", "rb") as rom:
 	for l in list_map:
 		addr, term, n, prefixlen = list_map[l]

@@ -3,7 +3,7 @@
 import os, sys
 from ast import literal_eval
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
-from common import utils
+from common import utils, tilesets
 
 if __name__ == '__main__':
 	input_file = sys.argv[1]
@@ -12,11 +12,11 @@ if __name__ == '__main__':
 
 	prefix = "." + os.path.splitext(os.path.basename(input_file))[0]
 
-	char_table = utils.merge_dicts([
-		utils.read_table("scripts/res/tileset_MainSpecial.tbl", reverse=True), 
-		utils.read_table("scripts/res/tileset_MainDialog.tbl", reverse=True), 
-		utils.read_table("scripts/res/tileset_dakuten.tbl", reverse=True),
-	])
+	char_table = utils.reverse_dict(utils.merge_dicts([
+            tilesets.get_tileset("MainSpecial"),
+            tilesets.get_tileset("MainDialog"),
+            tilesets.get_tileset("dakuten", override_offset=0x0)
+        ]))
 
 	try:
 		with open(input_file, 'r', encoding="utf-8") as i, open(output_file, 'w') as o:

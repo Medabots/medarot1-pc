@@ -5,12 +5,15 @@ import sys
 from collections import OrderedDict
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
-from common import utils
+from common import utils, tilesets
 
 rom_info = [("baserom_parts_collection.gb", "parts_collection", 0x1e14, 0x1e24, 0x10)] # [ROM File, Version Suffix, Text Table Bank Ptr, Address Ptr, Count]
 ptrs = open("./scripts/res/ptrs.tbl", "a+")
-table = utils.merge_dicts([utils.read_table("./scripts/res/tileset_MainSpecial.tbl"), utils.read_table("./scripts/res/tileset_MainDialog.tbl"), utils.read_table("./scripts/res/tileset_dakuten.tbl")])
-
+table = utils.merge_dicts([
+            tilesets.get_tileset("MainSpecial"),
+            tilesets.get_tileset("MainDialog"),
+            tilesets.get_tileset("dakuten", override_offset=0x0)
+        ])
 ptrs.seek(0)
 name_table = {}
 for line in ptrs:
