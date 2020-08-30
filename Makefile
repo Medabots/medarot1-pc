@@ -45,7 +45,7 @@ PTRLISTS_TEXT := $(TEXT)/ptrlists
 LISTS_TEXT := $(TEXT)/lists
 
 # Source Modules (directories in SRC)
-MODULES := core gfx data story
+MODULES := core gfx data text
 
 # Toolchain
 CC := rgbasm
@@ -70,7 +70,7 @@ MAP_OUT := $(foreach VERSION,$(VERSIONS),$(BASE)/$(OUTPUT_PREFIX)$(VERSION).$(MA
 
 # Sources
 OBJNAMES := $(foreach MODULE,$(MODULES),$(addprefix $(MODULE)., $(addsuffix .$(INT_TYPE), $(notdir $(basename $(wildcard $(SRC)/$(MODULE)/*.$(SOURCE_TYPE)))))))
-COMMON_SRC := $(wildcard $(COMMON)/*.$(SOURCE_TYPE))
+COMMON_SRC := $(wildcard $(COMMON)/*.$(SOURCE_TYPE)) $(BUILD)/buffer_constants.$(SOURCE_TYPE)
 
 TILESETS := $(notdir $(basename $(wildcard $(TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE))))
 PTRLISTS := $(notdir $(basename $(wildcard $(PTRLISTS_TEXT)/*.$(TEXT_TYPE))))
@@ -113,6 +113,10 @@ $(BASE)/$(OUTPUT_PREFIX)%.$(ROM_TYPE): $(OBJECTS) $$(addprefix $(BUILD)/$$*., $$
 .SECONDARY:
 $(BUILD)/%.$(INT_TYPE): $(SRC)/$$(firstword $$(subst ., ,$$*))/$$(lastword $$(subst ., ,$$*)).$(SOURCE_TYPE) $(COMMON_SRC) $(shared_ADDITIONAL) $$(wildcard $(SRC)/$$(firstword $$(subst ., ,$$*))/include/*.$(SOURCE_TYPE)) $$($$(firstword $$(subst ., ,$$*))_ADDITIONAL) $$($$(firstword $$(subst ., ,$$*))_$$(lastword $$(subst ., ,$$*))_ADDITIONAL) | $(BUILD)
 	$(CC) $(CC_ARGS) -DGAMEVERSION=$(CURVERSION) -o $@ $<
+
+# buffer_constants.asm is built from ptrs.tbl
+$(BUILD)/buffer_constants.$(SOURCE_TYPE): $(SCRIPT)/res/ptrs.tbl | $(BUILD)
+	$(PYTHON) $(SCRIPT)/ptrs2asm.py $^ $@
 
 # build/tilesets/*.malias from built 2bpp
 $(TILESET_OUT)/%.$(TSET_TYPE): $(TILESET_OUT)/%.$(TSET_SRC_TYPE) | $(TILESET_OUT)

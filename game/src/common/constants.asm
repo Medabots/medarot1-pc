@@ -1,3 +1,5 @@
+INCLUDE "build/buffer_constants.asm"
+
 hRegJoyp           EQU $ff00
 hRegSB             EQU $ff01
 hRegSC             EQU $ff02
