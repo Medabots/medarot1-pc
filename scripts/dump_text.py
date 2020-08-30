@@ -9,7 +9,7 @@ from common import utils
 
 rom_info = [("baserom_parts_collection.gb", "parts_collection", 0x1e14, 0x1e24, 0x10)] # [ROM File, Version Suffix, Text Table Bank Ptr, Address Ptr, Count]
 ptrs = open("./scripts/res/ptrs.tbl", "a+")
-table = utils.merge_dicts([utils.read_table("./scripts/res/tileset_MainSpecial.tbl"), utils.read_table("./scripts/res/tileset_MainDialog.tbl"), utils.read_table("./scripts/res/dakuten.tbl")])
+table = utils.merge_dicts([utils.read_table("./scripts/res/tileset_MainSpecial.tbl"), utils.read_table("./scripts/res/tileset_MainDialog.tbl"), utils.read_table("./scripts/res/tileset_dakuten.tbl")])
 
 ptrs.seek(0)
 name_table = {}

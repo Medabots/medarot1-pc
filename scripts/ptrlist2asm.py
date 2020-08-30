@@ -15,7 +15,7 @@ if __name__ == '__main__':
 	char_table = utils.merge_dicts([
 		utils.read_table("scripts/res/tileset_MainSpecial.tbl", reverse=True), 
 		utils.read_table("scripts/res/tileset_MainDialog.tbl", reverse=True), 
-		utils.read_table("scripts/res/dakuten.tbl", reverse=True),
+		utils.read_table("scripts/res/tileset_dakuten.tbl", reverse=True),
 	])
 
 	try:

@@ -15,10 +15,13 @@ namefile = None
 Path("scripts/res/").mkdir(parents=True, exist_ok=True)
 Path("game/src/gfx/").mkdir(parents=True, exist_ok=True)
 
-if os.path.exists("scripts/res/tileset_names.tbl"):
-	nametable = utils.read_table("scripts/res/tileset_names.tbl")
+if os.path.exists("scripts/res/meta_tileset_names.tbl"):
+	nametable = utils.read_table("scripts/res/meta_tileset_names.tbl")
 else:
-	namefile = open("scripts/res/tileset_names.tbl","w")
+	namefile = open("scripts/res/meta_tileset_names.tbl","w")
+
+offsetfile = open("scripts/res/meta_tileset_load_offsets.tbl","w")
+indexfile = open("scripts/res/meta_tileset_index.tbl","w")
 
 tiletable = 0x1103
 terminator = 0x122a # The last address in the TilesetInfo table, used instead of '0' to indicate that there's no actual entry there...
@@ -42,9 +45,11 @@ with open("baserom_parts_collection.gb", "rb") as rom, open("game/src/gfx/tilese
 	output.write('TilesetTable::\n')
 	for x,i in enumerate(ptrs):
 		if i == terminator:
-			output.write("  dw TilesetInfoEnd ; {:X}\n".format(x))
+			output.write(f"  dw TilesetInfoEnd ; {x:02X}\n")
 		else:
-			output.write("  dw TilesetInfo{} ; {:X}\n".format(data[i][3], x))
+			output.write(f"  dw TilesetInfo{data[i][3]} ; {x:02X}\n")
+			offsetfile.write(f"{x:02X}={data[i][2]:04X}\n")
+			indexfile.write(f"{x:02X}={data[i][3]}\n")
 	output.write("TilesetTableEnd::\n");
 	with open("game/src/gfx/tileset_files.asm", "w") as outputf:
 		for ptr in sorted(data):
@@ -73,3 +78,8 @@ with open("baserom_parts_collection.gb", "rb") as rom, open("game/src/gfx/tilese
 				outputf.write("TilesetEnd{}::\n\n".format(data[ptr][3]))
 
 		output.write("TilesetInfoEnd::\n");
+
+if namefile:
+	namefile.close()
+offsetfile.close()
+indexfile.close()

@@ -19,7 +19,7 @@ list_map = ({
 	'Medarotters' : ((0x17, 0x63e2), 0x50, 80, 3),
 })
 
-tileset = utils.merge_dicts([utils.read_table("scripts/res/tileset_MainSpecial.tbl"), utils.read_table("scripts/res/tileset_MainDialog.tbl"), utils.read_table("scripts/res/dakuten.tbl")])
+tileset = utils.merge_dicts([utils.read_table("scripts/res/tileset_MainSpecial.tbl"), utils.read_table("scripts/res/tileset_MainDialog.tbl"), utils.read_table("scripts/res/tileset_dakuten.tbl")])
 with open("baserom_parts_collection.gb", "rb") as rom:
 	for l in list_map:
 		addr, term, n, prefixlen = list_map[l]

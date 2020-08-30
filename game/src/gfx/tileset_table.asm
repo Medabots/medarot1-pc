@@ -2,22 +2,22 @@ INCLUDE "game/src/common/macros.asm"
 
 SECTION "Tileset Table", ROM0[$1103]
 TilesetTable::
-  dw TilesetInfo117B ; 0
-  dw TilesetInfo1180 ; 1
-  dw TilesetInfoMainSpecial ; 2
-  dw TilesetInfoMainDialog ; 3
-  dw TilesetInfo117B ; 4
-  dw TilesetInfo118F ; 5
-  dw TilesetInfo1194 ; 6
-  dw TilesetInfo1199 ; 7
-  dw TilesetInfo119E ; 8
-  dw TilesetInfo11A3 ; 9
-  dw TilesetInfo11AD ; A
-  dw TilesetInfo11B2 ; B
-  dw TilesetInfo11B7 ; C
-  dw TilesetInfo11BC ; D
-  dw TilesetInfo11C1 ; E
-  dw TilesetInfo11C6 ; F
+  dw TilesetInfo117B ; 00
+  dw TilesetInfo1180 ; 01
+  dw TilesetInfoMainSpecial ; 02
+  dw TilesetInfoMainDialog ; 03
+  dw TilesetInfo117B ; 04
+  dw TilesetInfo118F ; 05
+  dw TilesetInfo1194 ; 06
+  dw TilesetInfo1199 ; 07
+  dw TilesetInfo119E ; 08
+  dw TilesetInfo11A3 ; 09
+  dw TilesetInfo11AD ; 0A
+  dw TilesetInfo11B2 ; 0B
+  dw TilesetInfo11B7 ; 0C
+  dw TilesetInfo11BC ; 0D
+  dw TilesetInfo11C1 ; 0E
+  dw TilesetInfo11C6 ; 0F
   dw TilesetInfo11CB ; 10
   dw TilesetInfo11D0 ; 11
   dw TilesetInfo11D5 ; 12
