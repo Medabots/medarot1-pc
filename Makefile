@@ -42,7 +42,7 @@ DIALOG_TEXT := $(TEXT)/dialog
 PTRLISTS_TEXT := $(TEXT)/ptrlists
 
 # Source Modules (directories in SRC)
-MODULES := core gfx data
+MODULES := core gfx data story
 
 # Toolchain
 CC := rgbasm
