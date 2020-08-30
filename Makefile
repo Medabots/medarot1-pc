@@ -19,6 +19,7 @@ RAW_TSET_SRC_TYPE := png
 TSET_SRC_TYPE := 2bpp
 TSET_TYPE := malias
 TEXT_TYPE := txt
+LISTS_TYPE := bin
 
 # Directories
 BASE := .
@@ -30,6 +31,7 @@ SCRIPT := $(BASE)/scripts
 # Build Directories
 TILESET_OUT := $(BUILD)/tilesets
 PTRLISTS_OUT := $(BUILD)/ptrlists
+LISTS_OUT := $(BUILD)/lists
 
 # Game Source Directories
 SRC := $(GAME)/src
@@ -40,6 +42,7 @@ COMMON := $(SRC)/common
 TILESET_TEXT := $(TEXT)/tilesets
 DIALOG_TEXT := $(TEXT)/dialog
 PTRLISTS_TEXT := $(TEXT)/ptrlists
+LISTS_TEXT := $(TEXT)/lists
 
 # Source Modules (directories in SRC)
 MODULES := core gfx data story
@@ -71,12 +74,14 @@ COMMON_SRC := $(wildcard $(COMMON)/*.$(SOURCE_TYPE))
 
 TILESETS := $(notdir $(basename $(wildcard $(TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE))))
 PTRLISTS := $(notdir $(basename $(wildcard $(PTRLISTS_TEXT)/*.$(TEXT_TYPE))))
+LISTS := $(notdir $(basename $(wildcard $(LISTS_TEXT)/*.$(TEXT_TYPE))))
 
 # Intermediates
 OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
 
 TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 PTRLISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(PTRLISTS),$(PTRLISTS_OUT)/$(FILE)_$(VERSION).$(SOURCE_TYPE)))
+LISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(LISTS),$(LISTS_OUT)/$(FILE)_$(VERSION).$(LISTS_TYPE)))
 
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
@@ -84,6 +89,7 @@ PTRLISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(PTRLISTS),$(PTR
 shared_ADDITIONAL :=
 gfx_ADDITIONAL := $(TILESET_FILES)
 data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
+data_lists_ADDITIONAL := $(LISTS_FILES)
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection
@@ -121,6 +127,11 @@ $(TILESET_OUT)/%.$(TSET_SRC_TYPE): $(TILESET_TEXT)/%.$(RAW_TSET_SRC_TYPE) | $(TI
 $(PTRLISTS_OUT)/%.$(SOURCE_TYPE): $(PTRLISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT_TYPE) | $(PTRLISTS_OUT)
 	$(PYTHON) $(SCRIPT)/ptrlist2asm.py $< $@ $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
 
+# build/lists/*.asm from list txt
+.SECONDEXPANSION:
+$(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT_TYPE) | $(LISTS_OUT)
+	$(PYTHON) $(SCRIPT)/list2bin.py $< $@ $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
+
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
@@ -138,6 +149,9 @@ dump_text: | $(DIALOG_TEXT)
 
 dump_ptrlists: | $(PTRLISTS_TEXT)
 	$(PYTHON) $(SCRIPT)/dump_ptrlists.py
+
+dump_lists: | $(LISTS_TEXT)
+	$(PYTHON) $(SCRIPT)/dump_lists.py
 
 #Make directories if necessary
 $(BUILD):
@@ -160,3 +174,9 @@ $(PTRLISTS_TEXT):
 
 $(PTRLISTS_OUT):
 	mkdir -p $(PTRLISTS_OUT)
+
+$(LISTS_TEXT):
+	mkdir -p $(LISTS_TEXT)
+
+$(LISTS_OUT):
+	mkdir -p $(LISTS_OUT)
