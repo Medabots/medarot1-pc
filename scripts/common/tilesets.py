@@ -71,19 +71,8 @@ def get_tileset(tileset_name, index = -1, override_offset = -1):
     else:
         base_offset = override_offset
 
-    tbl = {}
+    tbl = utils.read_list(f'scripts/res/tilesets/{tileset_name}.lst', base_offset)
     tbl[0] = ' '
-    with open(f'scripts/res/tilesets/{tileset_name}.lst', 'r', encoding='utf-8') as f:
-        current_offset = base_offset
-        for line in f:
-            line = line.rstrip('\n')
-            if not line:
-                continue
-            if line.startswith('|'):
-                current_offset = int(line.lstrip('|'), 16)
-            else:
-                tbl[current_offset] = line
-                current_offset += 1
     return tbl
 
 if __name__ == "__main__":
