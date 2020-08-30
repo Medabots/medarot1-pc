@@ -7,7 +7,7 @@ from collections import OrderedDict
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
 from common import utils
 
-rom_info = [("baserom_parts_collection.gb", "pc", 0x1e14, 0x1e24, 0x10)] # [ROM File, Version Suffix, Text Table Bank Ptr, Address Ptr, Count]
+rom_info = [("baserom_parts_collection.gb", "parts_collection", 0x1e14, 0x1e24, 0x10)] # [ROM File, Version Suffix, Text Table Bank Ptr, Address Ptr, Count]
 ptrs = open("./scripts/res/ptrs.tbl", "a+")
 table = utils.merge_dicts([utils.read_table("./scripts/res/tileset_MainSpecial.tbl"), utils.read_table("./scripts/res/tileset_MainDialog.tbl"), utils.read_table("./scripts/res/dakuten.tbl")])
 
@@ -31,7 +31,7 @@ for info in rom_info:
         rom.seek(txt_tbl_ptr)
         text_ptrs = list(zip(banks, [utils.read_short(rom) for i in range(0, entry_count)]))
 
-        with open("./game/src/story/text_tables.asm", "w") as f:
+        with open("./game/src/data/text_tables.asm", "w") as f:
             for i, entry in enumerate([t for t in text_ptrs if t[0] != 0]):
                 f.write(f'SECTION "TextSection{i}", ROMX[${entry[1]:04x}], BANK[${entry[0]:02x}]\n')
                 f.write(f'TextSection{i}:\n')
@@ -142,7 +142,7 @@ for info in rom_info:
                 pointers[p] = t
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
-                writer = csv.writer(fp, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+                writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(["Pointer[#version]","Original"])
                 for p in pointers:
                     writer.writerow([hex(p), pointers[p]])
