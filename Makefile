@@ -139,8 +139,8 @@ $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
-.PHONY: dump_tilesets dump_text dump_ptrlists dump_free
-dump: dump_tilesets dump_text dump_ptrlists dump_free
+.PHONY: dump_tilesets dump_text dump_ptrlists dump_lists dump_free
+dump: dump_tilesets dump_text dump_ptrlists dump_lists dump_free
 
 dump_free:
 	$(PYTHON) $(SCRIPT)/dump_bank_free_end.py

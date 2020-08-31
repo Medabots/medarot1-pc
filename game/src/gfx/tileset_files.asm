@@ -4,11 +4,11 @@ TilesetStart117B::
   INCBIN "build/tilesets/117B.malias"
 TilesetEnd117B::
 
-SECTION "Tileset Data 1180", ROMX[$58DE], BANK[$08]
-Tileset1180::
-TilesetStart1180::
-  INCBIN "build/tilesets/1180.malias"
-TilesetEnd1180::
+SECTION "Tileset Data BoldLetters", ROMX[$58DE], BANK[$08]
+TilesetBoldLetters::
+TilesetStartBoldLetters::
+  INCBIN "build/tilesets/BoldLetters.malias"
+TilesetEndBoldLetters::
 
 SECTION "Tileset Data MainSpecial", ROMX[$4000], BANK[$08]
 TilesetMainSpecial::

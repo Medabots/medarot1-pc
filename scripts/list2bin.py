@@ -13,7 +13,8 @@ if __name__ == '__main__':
 	char_table = utils.reverse_dict(utils.merge_dicts([
             tilesets.get_tileset("MainSpecial"),
             tilesets.get_tileset("MainDialog"),
-            tilesets.get_tileset("dakuten", override_offset=0x0)
+            tilesets.get_tileset("dakuten", override_offset=0x0),
+            tilesets.get_tileset("BoldLetters"),
         ]))
 
 	char_table2 = char_table
@@ -29,5 +30,5 @@ if __name__ == '__main__':
 			for x,l in enumerate(length) if isinstance(length, tuple) else enumerate((length,)):
 				if not line.startswith("[") or line.startswith(prefix):
 					line = line.replace(prefix,"") # Not the best way to do it, but it's good enough
-					o.write(bytearray(utils.txt2bin(line, char_table if x == 0 else char_table2, pad=l, padbyte=padbyte)))
+					o.write(bytearray(utils.txt2bin(line, char_table, pad=l, padbyte=padbyte)))
 				line = i.readline()

@@ -3,7 +3,7 @@ INCLUDE "game/src/common/macros.asm"
 SECTION "Tileset Table", ROM0[$1103]
 TilesetTable::
   dw TilesetInfo117B ; 00
-  dw TilesetInfo1180 ; 01
+  dw TilesetInfoBoldLetters ; 01
   dw TilesetInfoMainSpecial ; 02
   dw TilesetInfoMainDialog ; 03
   dw TilesetInfo117B ; 04
@@ -66,9 +66,9 @@ TilesetTableEnd::
 SECTION "TilesetInfo 117B", ROM0[$117B]
 TilesetInfo117B::
   dbww BANK(Tileset117B), Tileset117B, $8800
-SECTION "TilesetInfo 1180", ROM0[$1180]
-TilesetInfo1180::
-  dbww BANK(Tileset1180), Tileset1180, $9500
+SECTION "TilesetInfo BoldLetters", ROM0[$1180]
+TilesetInfoBoldLetters::
+  dbww BANK(TilesetBoldLetters), TilesetBoldLetters, $9500
 SECTION "TilesetInfo MainSpecial", ROM0[$1185]
 TilesetInfoMainSpecial::
   dbww BANK(TilesetMainSpecial), TilesetMainSpecial, $9000

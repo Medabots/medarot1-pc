@@ -25,7 +25,8 @@ VERSIONS = [("baserom_parts_collection.gb", "parts_collection")]
 tileset = utils.merge_dicts([
             tilesets.get_tileset("MainSpecial"),
             tilesets.get_tileset("MainDialog"),
-            tilesets.get_tileset("dakuten", override_offset=0x0)
+            tilesets.get_tileset("dakuten", override_offset=0x0),
+            tilesets.get_tileset("BoldLetters"),
         ])
 
 for lst in list_map:
