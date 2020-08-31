@@ -37,7 +37,7 @@ with open(filename, 'rb') as rom, open(f"./text/credits/Credits.csv", "w", encod
 
     # 0x4F is the only special character in the credits
     # It indicates end of text, and how many frames to wait until we start drawing the next line
-    table[0x4f] = SpecialCharacter('*', end=True, always_print=True) 
+    table[0x4f] = SpecialCharacter('*', end=True, always_print=False) 
 
     for ptr in pointers:
         pointer_tbl = ptr[0] # Pointer to table entry
@@ -57,7 +57,7 @@ with open(filename, 'rb') as rom, open(f"./text/credits/Credits.csv", "w", encod
                     if  (
                         (token.always_print) or
                         (token.end and param != token.default) or
-                        (not param.end)
+                        (not token.end)
                         ):
                             t += "<" + token.symbol
                             if token.always_print or (param != None and param != token.default):

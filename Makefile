@@ -20,6 +20,9 @@ TSET_SRC_TYPE := 2bpp
 TSET_TYPE := malias
 TEXT_TYPE := txt
 LISTS_TYPE := bin
+CSV_TYPE = csv
+CREDITS_TYPE := bin
+DIALOG_TYPE := bin
 
 # Directories
 BASE := .
@@ -76,6 +79,7 @@ COMMON_SRC := $(wildcard $(COMMON)/*.$(SOURCE_TYPE)) $(BUILD)/buffer_constants.$
 TILESETS := $(notdir $(basename $(wildcard $(TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE))))
 PTRLISTS := $(notdir $(basename $(wildcard $(PTRLISTS_TEXT)/*.$(TEXT_TYPE))))
 LISTS := $(notdir $(basename $(wildcard $(LISTS_TEXT)/*.$(TEXT_TYPE))))
+CREDITS := $(wildcard $(CREDITS_TEXT)/*.$(CSV_TYPE)) # Technically only one file
 
 # Intermediates
 OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
@@ -83,6 +87,7 @@ OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
 TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 PTRLISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(PTRLISTS),$(PTRLISTS_OUT)/$(FILE)_$(VERSION).$(SOURCE_TYPE)))
 LISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(LISTS),$(LISTS_OUT)/$(FILE)_$(VERSION).$(LISTS_TYPE)))
+CREDITS_BIN_FILE := $(BUILD)/$(basename $(word 1, $(notdir $(CREDITS)))).$(CREDITS_TYPE)
 
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
@@ -91,6 +96,7 @@ shared_ADDITIONAL :=
 gfx_ADDITIONAL := $(TILESET_FILES)
 data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
 data_lists_ADDITIONAL := $(LISTS_FILES)
+data_credits_ADDITIONAL := $(CREDITS_BIN_FILE)
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection
@@ -136,6 +142,11 @@ $(PTRLISTS_OUT)/%.$(SOURCE_TYPE): $(PTRLISTS_TEXT)/$$(word 1, $$(subst _, ,$$*))
 .SECONDEXPANSION:
 $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT_TYPE) | $(LISTS_OUT)
 	$(PYTHON) $(SCRIPT)/list2bin.py $< $@ $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
+
+# build/credits.bin from Credits.csv
+# Output file is actually the first argument to the script
+$(CREDITS_BIN_FILE): $(CREDITS) $(SRC)/data/credits.asm | $(BUILD)
+	$(PYTHON) scripts/credits2bin.py $@ $^
 
 clean:
 	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0

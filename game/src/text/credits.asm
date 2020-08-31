@@ -1,11 +1,3 @@
-SECTION "Credits", ROMX[$539b], BANK[$16]
-Credits:
-;  INCBIN "build/Credits.bin"
-;CreditsBinEnd: ; Unused space
-;REPT $6000 - CreditsBinEnd
-;  db 0
-;ENDR
-
 SECTION "Load Credit Text", ROMX[$5280], BANK[$16]
 LoadCreditText:
   ld d, $0
