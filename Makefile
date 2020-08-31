@@ -43,6 +43,7 @@ TILESET_TEXT := $(TEXT)/tilesets
 DIALOG_TEXT := $(TEXT)/dialog
 PTRLISTS_TEXT := $(TEXT)/ptrlists
 LISTS_TEXT := $(TEXT)/lists
+CREDITS_TEXT := $(TEXT)/credits
 
 # Source Modules (directories in SRC)
 MODULES := core gfx data text
@@ -157,6 +158,9 @@ dump_ptrlists: | $(PTRLISTS_TEXT)
 dump_lists: | $(LISTS_TEXT)
 	$(PYTHON) $(SCRIPT)/dump_lists.py
 
+dump_credits: | $(CREDITS_TEXT)
+	$(PYTHON) $(SCRIPT)/dump_credits.py
+
 #Make directories if necessary
 $(BUILD):
 	mkdir -p $(BUILD)
@@ -184,3 +188,6 @@ $(LISTS_TEXT):
 
 $(LISTS_OUT):
 	mkdir -p $(LISTS_OUT)
+
+$(CREDITS_TEXT):
+	mkdir -p $(CREDITS_TEXT)
