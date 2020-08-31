@@ -1,5 +1,7 @@
 ; TODO: Will need to move this into a separate versions directory if we do pc2 (search VERSIONSPECIFIC)
 
+; Pointer text is generally referenced in routines directly, instead of having a common routine like lists
+
 SECTION "Part Names", ROMX[$7627], BANK[$1]
 PartTypesPtr::
 INCLUDE "build/ptrlists/PartTypes_{GAMEVERSION}.asm"
