@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/VariantXYZ/medarot1-pc/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/VariantXYZ/medarot1-pc?branch=master)
+[![CircleCI](https://circleci.com/gh/Medabots/medarot1-pc/tree/master.svg?style=svg)](https://app.circleci.com/pipelines/github/Medabots/medarot1-pc?branch=master)
 
 # Building
 
