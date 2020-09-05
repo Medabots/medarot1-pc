@@ -5,8 +5,8 @@ from ast import literal_eval
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
 from common import utils, tilesets
 
-input_file = sys.argv[1]
-output_file = sys.argv[2]
+output_file = sys.argv[1]
+input_file = sys.argv[2]
 version_suffix = sys.argv[3]
 
 char_table = utils.reverse_dict(utils.merge_dicts([

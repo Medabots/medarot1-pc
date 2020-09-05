@@ -38,7 +38,7 @@ for info in rom_info:
             for i, entry in enumerate([t for t in text_ptrs if t[0] != 0]):
                 f.write(f'SECTION "TextSection{i}", ROMX[${entry[1]:04x}], BANK[${entry[0]:02x}]\n')
                 f.write(f'TextSection{i}:\n')
-                #f.write(f'  INCBIN "build/TextSection{i}.bin"\n\n')
+                f.write(f'  INCBIN "build/dialog/TextSection{i}_{{GAMEVERSION}}.bin"\n\n')
 
             f.write('\n\n')
 
@@ -93,6 +93,7 @@ for info in rom_info:
             pointers[realaddr] = end # Treat pointers[0] as the end of the list of addresses
             reverse_map = {}
             realaddr = rom.tell()
+            last_ptr = 0
             while(realaddr < end):
                 val = utils.rom2realaddr((entry[0], utils.read_short(rom)))
                 if val in reverse_map:
@@ -103,64 +104,98 @@ for info in rom_info:
                     pointer_lengths[pointer_lengths_key] = min(val - pointer_lengths[pointer_lengths_key], 0xff)
                     pointer_lengths[realaddr] = val 
                     pointer_lengths_key = realaddr
+                    if val > last_ptr:
+                        last_ptr = val
 
                 pointers[realaddr] = val
                 realaddr = rom.tell()
 
             pointer_lengths[next(reversed(pointer_lengths))] = min(pointer_lengths[next(reversed(pointer_lengths))], 0xff)
 
+            text = {}
+            counter = 0
+
+            # Instead of reading through the pointer table, parse through all the text in case it's out of order
+            while rom.tell() in pointers.values():
+                p = list(pointers.keys())[list(pointers.values()).index(rom.tell())]
+
+                while True:
+                    t = ""
+                    queued_ptrs_write = "" # Queue, but don't write immediately until we know it's ignored or not
+                    text_bytes = []
+                    while len(text_bytes) < pointer_lengths[p]:
+                        b = utils.read_byte(rom)
+                        text_bytes.append(b)
+                        if b in table:
+                            token = table[b]
+                            if type(token) == str: # Normal character
+                                t += token
+                            elif isinstance(token, SpecialCharacter): # Special character
+                                param = {0: lambda x: None, 1: utils.read_byte, 2: utils.read_short}[token.bts](rom)
+                                if token.always_print or (param != None and param != token.default):
+                                    t += "<" + token.symbol
+                                if param != None:
+                                    if (param != None and not token.end and param != token.default) or (token.end and param != token.default):
+                                        if param != token.default:
+                                            if token.names and param in token.names:
+                                                t += token.names[param]
+                                            else:
+                                                if token.names is not None:
+                                                    n = f"BUF{len(token.names):02X}"
+                                                    token.names[param] = n
+                                                    queued_ptrs_write += f"{n}={hex(param)}\n"
+                                                    t += n
+                                                    # Write the names to the table later, just in case something is ignored
+                                                else:
+                                                    t += hex(param)[2:]
+                                if token.always_print or (param != None and param != token.default):
+                                    t += ">"
+                                if token.end:
+                                    if not t:
+                                        t = f"<{token.symbol}{param:02X}>"
+                                     # This is a hack, but step back one because they'll reuse this byte
+                                    if param not in range(0, 4+1):
+                                        rom.seek(-1, 1)
+                                    break
+                        else: # Not found, print literal bytes instead
+                            t += f"<${b:02X}>"
+                    else: # If we never break out of the while loop before the condition fails, this is probably garbage and we should treat it as ignored
+                        t = "<IGNORED>"
+                        #for b in text_bytes:
+                        #    t += f"<${b:02X}>"
+                    if queued_ptrs_write and not t.startswith("<IGNORED>") or (type(p) == str and p.startswith("UNUSED_")):
+                        ptrs.write(queued_ptrs_write)
+                    
+                    text[p] = t
+
+                    if rom.tell() in pointers.values() or rom.tell() > last_ptr:
+                        break
+
+                    p = f"UNUSED_{counter:02}"
+                    counter += 1
+                    pointer_lengths[p] = 0xff
+
+            # Add duplicate entries to text
             for p in pointers:
                 if type(pointers[p]) == str:
-                    continue
+                    text[p] = pointers[p]
 
-                rom.seek(pointers[p])
-                t = ""
-                queued_ptrs_write = "" # Queue, but don't write immediately until we know it's ignored or not
-                text_bytes = []
-                while len(text_bytes) < pointer_lengths[p]:
-                    b = utils.read_byte(rom)
-                    text_bytes.append(b)
-                    if b in table:
-                        token = table[b]
-                        if type(token) == str: # Normal character
-                            t += token
-                        elif isinstance(token, SpecialCharacter): # Special character
-                            param = {0: lambda x: None, 1: utils.read_byte, 2: utils.read_short}[token.bts](rom)
-                            if token.always_print or (param != None and param != token.default):
-                                t += "<" + token.symbol
-                            if param != None:
-                                if (param != None and not token.end and param != token.default) or (token.end and param != token.default):
-                                    if param != token.default:
-                                        if token.names and param in token.names:
-                                            t += token.names[param]
-                                        else:
-                                            if token.names is not None:
-                                                n = f"BUF{len(token.names):02X}"
-                                                token.names[param] = n
-                                                queued_ptrs_write += f"{n}={hex(param)}\n"
-                                                t += n
-                                                # Write the names to the table later, just in case something is ignored
-                                            else:
-                                                t += hex(param)[2:]
-                            if token.always_print or (param != None and param != token.default):
-                                t += ">"
-                            if token.end:
-                                if not t:
-                                    t = f"<{token.symbol}{param:02X}>"
-                                break
-                    else: # Not found, print literal bytes instead
-                        t += f"<${b:02X}>"
-                else: # If we never break out of the while loop before the condition fails, this is probably garbage and we should treat it as ignored
-                    # Even if we ignore it, print out the bytes just in case we accidentally tagged something we shouldn't as ignored
-                    t = "<IGNORED>"
-                    #for b in text_bytes:
-                    #    t += f"<${b:02X}>"
-                if queued_ptrs_write:
-                    ptrs.write(queued_ptrs_write)
-                pointers[p] = t
+            # Finally, they may have had some pointers literally just point to the middle of other segments, so we need to account for this
+            missing = set(pointers) - set(text)
+            for p in missing:
+                ptr = pointers[p]
+                rom.seek(ptr - 1)
+                while rom.tell() not in pointers.values():
+                    rom.seek(-1, 1)
+                idx = list(pointers.keys())[list(pointers.values()).index(rom.tell())]
+                text[p] = f"<OFFSET:{idx:X}:{ptr - rom.tell():X}>"
+
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(["Pointer[#version]","Original"])
-                for p in pointers:
-                    writer.writerow([hex(p), pointers[p]])
+                for p in text:
+                    if type(p) == str:
+                        writer.writerow([p, text[p]])
+                    else:
+                        writer.writerow([hex(p), text[p]])

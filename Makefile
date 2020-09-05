@@ -35,6 +35,7 @@ SCRIPT := $(BASE)/scripts
 TILESET_OUT := $(BUILD)/tilesets
 PTRLISTS_OUT := $(BUILD)/ptrlists
 LISTS_OUT := $(BUILD)/lists
+DIALOG_OUT := $(BUILD)/dialog
 
 # Game Source Directories
 SRC := $(GAME)/src
@@ -80,6 +81,7 @@ TILESETS := $(notdir $(basename $(wildcard $(TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE
 PTRLISTS := $(notdir $(basename $(wildcard $(PTRLISTS_TEXT)/*.$(TEXT_TYPE))))
 LISTS := $(notdir $(basename $(wildcard $(LISTS_TEXT)/*.$(TEXT_TYPE))))
 CREDITS := $(wildcard $(CREDITS_TEXT)/*.$(CSV_TYPE)) # Technically only one file
+DIALOG := $(notdir $(basename  $(wildcard $(DIALOG_TEXT)/*.$(CSV_TYPE))))
 
 # Intermediates
 OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
@@ -88,6 +90,7 @@ TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 PTRLISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(PTRLISTS),$(PTRLISTS_OUT)/$(FILE)_$(VERSION).$(SOURCE_TYPE)))
 LISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(LISTS),$(LISTS_OUT)/$(FILE)_$(VERSION).$(LISTS_TYPE)))
 CREDITS_BIN_FILE := $(BUILD)/$(basename $(word 1, $(notdir $(CREDITS)))).$(CREDITS_TYPE)
+DIALOG_BIN_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(DIALOG),$(DIALOG_OUT)/$(FILE)_$(VERSION).$(DIALOG_TYPE)))
 
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
@@ -97,10 +100,14 @@ gfx_ADDITIONAL := $(TILESET_FILES)
 data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
 data_lists_ADDITIONAL := $(LISTS_FILES)
 data_credits_ADDITIONAL := $(CREDITS_BIN_FILE)
+data_text_tables_ADDITIONAL := $(DIALOG_BIN_FILES)
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection
 all: $(VERSIONS)
+
+clean:
+	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
 # Support building specific versions
 # Unfortunately make has no real good way to do this dynamically from VERSIONS so we just manually set CURVERSION here to propagate to the rgbasm call
@@ -121,35 +128,41 @@ $(BASE)/$(OUTPUT_PREFIX)%.$(ROM_TYPE): $(OBJECTS) $$(addprefix $(BUILD)/$$*., $$
 $(BUILD)/%.$(INT_TYPE): $(SRC)/$$(firstword $$(subst ., ,$$*))/$$(lastword $$(subst ., ,$$*)).$(SOURCE_TYPE) $(COMMON_SRC) $(shared_ADDITIONAL) $$(wildcard $(SRC)/$$(firstword $$(subst ., ,$$*))/include/*.$(SOURCE_TYPE)) $$($$(firstword $$(subst ., ,$$*))_ADDITIONAL) $$($$(firstword $$(subst ., ,$$*))_$$(lastword $$(subst ., ,$$*))_ADDITIONAL) | $(BUILD)
 	$(CC) $(CC_ARGS) -DGAMEVERSION=$(CURVERSION) -o $@ $<
 
-# buffer_constants.asm is built from ptrs.tbl
-$(BUILD)/buffer_constants.$(SOURCE_TYPE): $(SCRIPT)/res/ptrs.tbl | $(BUILD)
-	$(PYTHON) $(SCRIPT)/ptrs2asm.py $^ $@
-
-# build/tilesets/*.malias from built 2bpp
-$(TILESET_OUT)/%.$(TSET_TYPE): $(TILESET_OUT)/%.$(TSET_SRC_TYPE) | $(TILESET_OUT)
-	$(PYTHON) $(SCRIPT)/tileset2malias.py $< $@
-
 # build/tilesets/*.2bpp from source png
 $(TILESET_OUT)/%.$(TSET_SRC_TYPE): $(TILESET_TEXT)/%.$(RAW_TSET_SRC_TYPE) | $(TILESET_OUT)
 	$(CCGFX) $(CCGFX_ARGS) -d 2 -o $@ $<
 
+### Scripts
+## Unless specified otherwise, called as 'script.py [output file] [optional resource file] [input file] [optional version suffix]'
+
+# buffer_constants.asm is built from ptrs.tbl
+$(BUILD)/buffer_constants.$(SOURCE_TYPE): $(SCRIPT)/res/ptrs.tbl | $(BUILD)
+	$(PYTHON) $(SCRIPT)/ptrs2asm.py $@ $^
+
+# build/tilesets/*.malias from built 2bpp
+$(TILESET_OUT)/%.$(TSET_TYPE): $(TILESET_OUT)/%.$(TSET_SRC_TYPE) | $(TILESET_OUT)
+	$(PYTHON) $(SCRIPT)/tileset2malias.py $@ $<
+
 # build/ptrlists/*.asm from ptrlist txt
 .SECONDEXPANSION:
 $(PTRLISTS_OUT)/%.$(SOURCE_TYPE): $(PTRLISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT_TYPE) | $(PTRLISTS_OUT)
-	$(PYTHON) $(SCRIPT)/ptrlist2asm.py $< $@ $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
+	$(PYTHON) $(SCRIPT)/ptrlist2asm.py $@ $< $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
 
 # build/lists/*.asm from list txt
 .SECONDEXPANSION:
 $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT_TYPE) | $(LISTS_OUT)
-	$(PYTHON) $(SCRIPT)/list2bin.py $< $@ $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
+	$(PYTHON) $(SCRIPT)/list2bin.py $@ $< $(subst $(subst .$(TEXT_TYPE),,$(<F))_,,$*)
 
 # build/credits.bin from Credits.csv
-# Output file is actually the first argument to the script
 $(CREDITS_BIN_FILE): $(CREDITS) $(SRC)/data/credits.asm | $(BUILD)
-	$(PYTHON) scripts/credits2bin.py $@ $^
+	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^
 
-clean:
-	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
+# build/dialog/*.bin from dialog csv files
+.SECONDEXPANSION:
+$(DIALOG_OUT)/%.$(DIALOG_TYPE): $(DIALOG_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(CSV_TYPE) $(SRC)/data/text_tables.asm | $(DIALOG_OUT)
+	$(PYTHON) $(SCRIPT)/dialog2bin.py $@ $^ $(subst $(subst .$(CSV_TYPE),,$(<F))_,,$*)
+
+### Dump Scripts
 
 .PHONY: dump dump_free dump_tilesets dump_text dump_ptrlists dump_lists dump_credits
 dump: dump_free dump_tilesets dump_text dump_ptrlists dump_lists dump_credits
@@ -187,6 +200,9 @@ $(TILESET_OUT):
 
 $(DIALOG_TEXT):
 	mkdir -p $(DIALOG_TEXT)
+
+$(DIALOG_OUT):
+	mkdir -p $(DIALOG_OUT)
 
 $(PTRLISTS_TEXT):
 	mkdir -p $(PTRLISTS_TEXT)

@@ -9,7 +9,7 @@ with open('baserom_parts_collection.gb', 'rb') as rom, open('game/src/core/free.
 		while unpack("B", rom.read(1))[0] == 0x00:
 			x += 1
 			rom.seek(-2, 1)
-		pos = 0x4000 + rom.tell() % 0x4000
+		pos = 0x4000 + rom.tell() % 0x4000 + 2 # Add 2 to allow for text bank '4F 00' to fit
 		output.write(f'SECTION "BANK{i:02X}_END", ROMX[${pos:x}], BANK[${i:x}]\n')
 		output.write(f'BANK{i:02X}_END::\n')
 		output.write(f'REPT $8000 - BANK{i:02X}_END\n')

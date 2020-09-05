@@ -6,8 +6,8 @@ sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
 from common import utils, tilesets
 
 if __name__ == '__main__':
-    input_file = sys.argv[1]
-    output_file = sys.argv[2]
+    output_file = sys.argv[1]
+    input_file = sys.argv[2]
 
     fname = os.path.splitext(os.path.basename(input_file))[0]
 
