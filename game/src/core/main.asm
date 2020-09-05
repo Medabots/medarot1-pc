@@ -67,16 +67,16 @@ Main::
   ld [hRegIF], a
   ld a, $b
   ld [hRegIE], a
-  ld a, $1f ; BANK(SGB_DetectICDPresence)
+  ld a, BANK(SGB_DetectICDPresence)
   ld [$c6e0], a
   rst $10
   ld a, $0
   ld [$c5fa], a
-  call $41af ; SGB_DetectICDPresence
+  call SGB_DetectICDPresence
   jp nc, .jpA
   ld a, $1
   ld [$c5fa], a
-  call $4000 ; SGB_InstallBorderAndHotpatches
+  call SGB_InstallBorderAndHotpatches
 
 .jpA
   ld a, $1
@@ -92,9 +92,9 @@ Main::
   ld a, [$c5a1]
   or a
   jr nz, .jpB ; 0x423 $1a
-  call $3d4f
-  call $3ca6
-  call $3c8f
+  call SerIO_RecvBufferPull
+  call SerIO_SendBufferPush
+  call SerIO_SendConnectPacket
   call $0c1c
   call $38e7
   call $0cd8
@@ -102,13 +102,13 @@ Main::
   ld a, $1
   ld [$c5a1], a
 .jpB
-  call $0590
+  call $0590 ; Audio handling.
 .waitForNextFrame
-  ld a, [$ff92]
+  ldh a, [$ff92]
   and a
   jr z, .waitForNextFrame ; 0x445 $fb
   xor a
-  ld [$ff92], a
+  ldh [$ff92], a
   xor a
   ld [$c5a1], a
   jp .gameLoop
