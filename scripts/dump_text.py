@@ -87,6 +87,9 @@ for info in rom_info:
             rom.seek(realaddr)
             end = utils.rom2realaddr((entry[0], utils.read_short(rom)))
             pointers = OrderedDict()
+            pointer_lengths = OrderedDict()
+            pointer_lengths_key = realaddr
+            pointer_lengths[pointer_lengths_key] = end
             pointers[realaddr] = end # Treat pointers[0] as the end of the list of addresses
             reverse_map = {}
             realaddr = rom.tell()
@@ -96,8 +99,15 @@ for info in rom_info:
                     val = f"=0x{reverse_map[val]:x}"
                 else:
                     reverse_map[val] = realaddr
+                    # Record the guessed 'max length'
+                    pointer_lengths[pointer_lengths_key] = min(val - pointer_lengths[pointer_lengths_key], 0xff)
+                    pointer_lengths[realaddr] = val 
+                    pointer_lengths_key = realaddr
+
                 pointers[realaddr] = val
                 realaddr = rom.tell()
+
+            pointer_lengths[next(reversed(pointer_lengths))] = min(pointer_lengths[next(reversed(pointer_lengths))], 0xff)
 
             for p in pointers:
                 if type(pointers[p]) == str:
@@ -106,8 +116,10 @@ for info in rom_info:
                 rom.seek(pointers[p])
                 t = ""
                 queued_ptrs_write = "" # Queue, but don't write immediately until we know it's ignored or not
-                while True:
+                text_bytes = []
+                while len(text_bytes) < pointer_lengths[p]:
                     b = utils.read_byte(rom)
+                    text_bytes.append(b)
                     if b in table:
                         token = table[b]
                         if type(token) == str: # Normal character
@@ -136,11 +148,14 @@ for info in rom_info:
                                 if not t:
                                     t = f"<{token.symbol}{param:02X}>"
                                 break
-                    else: # Not found, print literal
+                    else: # Not found, print literal bytes instead
                         t += f"<${b:02X}>"
-                if "  " in t: # This is a hack, but if we find multiple spaces, the data should be ignored
+                else: # If we never break out of the while loop before the condition fails, this is probably garbage and we should treat it as ignored
+                    # Even if we ignore it, print out the bytes just in case we accidentally tagged something we shouldn't as ignored
                     t = "<IGNORED>"
-                elif queued_ptrs_write:
+                    #for b in text_bytes:
+                    #    t += f"<${b:02X}>"
+                if queued_ptrs_write:
                     ptrs.write(queued_ptrs_write)
                 pointers[p] = t
 
