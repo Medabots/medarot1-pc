@@ -10,23 +10,23 @@
 09:
 0A:
 0B:
-0C: Snippet1
-0D: Snippet2
-0E: Snippet3
-0F: Snippet4
+0C: TextSection0
+0D: TextSection1
+0E: TextSection2
+0F: TextSection3
 10:
 11:
 12:
-13:
+13: TextSection5
 14:
 15:
-16: StoryText1
+16: TextSection4
 17:
-18: StoryText2
+18: TextSection6
 19:
-1A: StoryText3
+1A: TextSection7
 1B:
 1C:
-1D: BattleText
+1D: TextSection8
 1E: Tilemaps
 1F: (Last bank used by game)
