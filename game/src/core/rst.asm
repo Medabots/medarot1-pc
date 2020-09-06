@@ -26,14 +26,14 @@ SECTION "rst20",ROM0[$20]
   dec h ;h--
   ret
 
-SECTION "rst28",ROM0[$28]
-  add l ;a = l+a
-  ld l, a ;l = a
-  ret nc ;Return if not 'c'
-  inc h ;h++
+SECTION "rst28",ROM0[$28] ; hl += a
+  add l
+  ld l, a
+  ret nc 
+  inc h
   ret
 
-SECTION "rst30",ROM0[$30] ;
+SECTION "rst30",ROM0[$30] ; hl = [hl + a*2], useful for loading data from pointer tables
   add a
   rst $28
   ld a, [hli]
@@ -41,7 +41,7 @@ SECTION "rst30",ROM0[$30] ;
   ld l, a
   ret
 
-SECTION "rst38",ROM0[$38] ; Unused
+SECTION "rst38",ROM0[$38] ; hl = [hl]
   ld a, [hli]
   ld l, [hl]
   ld h, a
