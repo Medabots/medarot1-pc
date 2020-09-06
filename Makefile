@@ -125,7 +125,7 @@ $(VERSIONS): %: $(OUTPUT_PREFIX)%.$(ROM_TYPE)
 .SECONDEXPANSION:
 $(BASE)/$(OUTPUT_PREFIX)%.$(ROM_TYPE): $(OBJECTS) $$(addprefix $(BUILD)/$$*., $$(addsuffix .$(INT_TYPE), $$(notdir $$(basename $$(wildcard $(SRC)/$$*/*.$(SOURCE_TYPE)))))) | $(BASE)/$(ORIGINAL_PREFIX)%.$(ROM_TYPE)
 	$(LD) $(LD_ARGS) --dmg -n $(OUTPUT_PREFIX)$*.$(SYM_TYPE) -m $(OUTPUT_PREFIX)$*.$(MAP_TYPE) -O $| -o $@ $^
-	$(FIX) $(FIX_ARGS) -v -k 9C -l 0x33 -m 0x03 -p 0 -r 3 $@ -t "$(subst _, ,$(call TOUPPER,$(CURVERSION)))"
+	$(FIX) $(FIX_ARGS) -v -k 9C -l 0x33 -m 0x13 -p 0 -r 3 $@ -t "$(subst _, ,$(call TOUPPER,$(CURVERSION)))"
 
 # Don't delete intermediate files
 .SECONDEXPANSION:
