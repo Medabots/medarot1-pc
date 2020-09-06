@@ -163,7 +163,7 @@ for info in rom_info:
                         t = "<IGNORED>"
                         #for b in text_bytes:
                         #    t += f"<${b:02X}>"
-                    if queued_ptrs_write and not t.startswith("<IGNORED>") or (type(p) == str and p.startswith("UNUSED_")):
+                    if queued_ptrs_write and not t.startswith("<IGNORED>") or (isinstance(p, str) and p.startswith("UNUSED_")):
                         ptrs.write(queued_ptrs_write)
                     
                     text[p] = t
@@ -175,9 +175,11 @@ for info in rom_info:
                     counter += 1
                     pointer_lengths[p] = 0xff
 
+                    pointers[p] = rom.tell()
+
             # Add duplicate entries to text
             for p in pointers:
-                if type(pointers[p]) == str:
+                if isinstance(pointers[p], str):
                     text[p] = pointers[p]
 
             # Finally, they may have had some pointers literally just point to the middle of other segments, so we need to account for this
@@ -188,14 +190,17 @@ for info in rom_info:
                 while rom.tell() not in pointers.values():
                     rom.seek(-1, 1)
                 idx = list(pointers.keys())[list(pointers.values()).index(rom.tell())]
-                text[p] = f"<OFFSET:{idx:X}:{ptr - rom.tell():X}>"
+                if isinstance(idx, str):
+                    text[p] = f"<OFFSET:{idx}:{ptr - rom.tell():X}>"
+                else:
+                    text[p] = f"<OFFSET:{idx:X}:{ptr - rom.tell():X}>"
 
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
                 writer.writerow(["Pointer[#version]","Original"])
                 for p in text:
-                    if type(p) == str:
+                    if isinstance(p, str):
                         writer.writerow([p, text[p]])
                     else:
                         writer.writerow([hex(p), text[p]])

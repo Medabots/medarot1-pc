@@ -61,14 +61,20 @@ with open(input_file, 'r', encoding='utf-8') as fp:
         if line[idx_text].startswith('<OFFSET'): # A special case that starts in the middle of (probably) a section marked 'UNUSED_'
             _, src_ptr, offset = line[idx_text].strip('<>').split(':')
             pointer = int(line[idx_pointer], 16)
-            pointer_offset_map[pointer] = pointer_offset_map[int(src_ptr, 16)] + int(offset, 16)
+            try:
+                pointer_offset_map[pointer] = pointer_offset_map[int(src_ptr, 16)] + int(offset, 16)
+            except ValueError:
+                pointer_offset_map[pointer] = pointer_offset_map[src_ptr] + int(offset, 16)
             continue
 
 
         l = len(bintext)
-        if not line[idx_pointer].startswith("UNUSED_"):
+
+        try:
             pointer_offset_map[int(line[idx_pointer], 16)] = l
-      
+        except ValueError:
+            pointer_offset_map[line[idx_pointer]] = l
+
         if not txt.startswith('<IGNORED>'):
             length = len(txt)
             i = 0
@@ -119,6 +125,12 @@ with open(input_file, 'r', encoding='utf-8') as fp:
                     bintext.append(endcode)
 
 # The lines are in order of how the text is actually laid out, not in order of how the pointers reference them, so we need to reorder the offsets by key
+
+# Remove entries whose keys are strings (UNUSED or other special cases we don't want)
+for key in list(pointer_offset_map.keys()):
+    if isinstance(key, str):
+        del pointer_offset_map[key]
+
 offsets = [pointer_offset_map[key] for key in sorted(pointer_offset_map.keys())]
 init_text_offsets = list(map(lambda x: pack("<H", x + (2 * (len(offsets))) + ptr_table_offset), offsets))
 
