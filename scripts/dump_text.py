@@ -177,13 +177,14 @@ for info in rom_info:
 
                     pointers[p] = rom.tell()
 
-            # Add duplicate entries to text
+            # Account for duplicates, but add them at the end
+            duplicates = {}
             for p in pointers:
                 if isinstance(pointers[p], str):
-                    text[p] = pointers[p]
+                    duplicates[p] = pointers[p]
 
             # Finally, they may have had some pointers literally just point to the middle of other segments, so we need to account for this
-            missing = set(pointers) - set(text)
+            missing = set(pointers) - set(text) - set(duplicates)
             for p in missing:
                 ptr = pointers[p]
                 rom.seek(ptr - 1)
@@ -206,6 +207,8 @@ for info in rom_info:
                         j += 1
                         curr += 1
                 text[p] += text[idx][curr:]
+
+            text = utils.merge_dicts([text, duplicates])
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
