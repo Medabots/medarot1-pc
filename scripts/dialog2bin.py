@@ -11,8 +11,7 @@ from common import utils, tilesets
 
 output_file = sys.argv[1]
 input_file = sys.argv[2]
-data_file = sys.argv[3]
-version_suffix = sys.argv[4] # TODO: Use this
+version_suffix = sys.argv[3] # TODO: Use this
 
 # Setup
 
@@ -25,20 +24,6 @@ char_table = utils.reverse_dict(utils.merge_dicts([
 ptr_names = utils.read_table(os.path.join(os.path.dirname(__file__), 'res', 'ptrs.tbl'), keystring=True)
 
 # Process Text
-
-bank = 0
-base_offset = 0
-with open(data_file, 'r') as src:
-    for line in src:
-        if line.startswith('SECTION') and f'"{base_name}"' in line:
-            o = line.lstrip('SECTION ').replace(' ', '').replace('\n','').replace('\r\n','').replace('"','').split(',')
-            #Name ROMX[$OFFSET] BANK[$BANK]
-            bank = int(o[2].replace('BANK','').replace('[','').replace(']','').replace('$','0x'), 16)
-            ptr_table_offset = int(o[1].replace('ROMX','').replace('[','').replace(']','').replace('$','0x'), 16)
-            break
-    else:
-        raise Exception(f"Could not find {base_name} section in {data_file}")
-
 with open(input_file, 'r', encoding='utf-8') as fp:
     reader = csv.reader(fp, delimiter=',', quotechar='"')
     header = next(reader, None)
@@ -48,6 +33,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
     # Keep track of the offset from the start
     bintext = bytearray()
     pointer_offset_map = {}
+    pointer_length_map = {}
     for line in reader:
         txt = line[idx_text]
     
@@ -57,6 +43,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
         if txt.startswith('='): # Pointer to existing text
             pointer = int(txt.lstrip('='), 16)
             pointer_offset_map[int(line[idx_pointer], 16)] = pointer_offset_map[pointer]
+            pointer_length_map[int(line[idx_pointer], 16)] = 0
             continue
 
         if line[idx_text].startswith('<OFFSET'): # A special case that starts in the middle of (probably) a section marked 'UNUSED_'
@@ -66,15 +53,18 @@ with open(input_file, 'r', encoding='utf-8') as fp:
                 pointer_offset_map[pointer] = pointer_offset_map[int(src_ptr, 16)] + int(offset, 16)
             except ValueError:
                 pointer_offset_map[pointer] = pointer_offset_map[src_ptr] + int(offset, 16)
+            pointer_length_map[pointer] = 0
             continue
 
 
         l = len(bintext)
 
         try:
-            pointer_offset_map[int(line[idx_pointer], 16)] = l
+            pointer = int(line[idx_pointer], 16)
         except ValueError:
-            pointer_offset_map[line[idx_pointer]] = l
+            pointer = line[idx_pointer]
+
+        pointer_offset_map[pointer] = l
 
         if not txt.startswith('<IGNORED>'):
             length = len(txt)
@@ -125,19 +115,21 @@ with open(input_file, 'r', encoding='utf-8') as fp:
                 if endcode in range(0, 4+1): # This is a hack to deal with reproducing how Natsume builds text
                     bintext.append(endcode)
 
-# The lines are in order of how the text is actually laid out, not in order of how the pointers reference them, so we need to reorder the offsets by key
+        pointer_length_map[pointer] = len(bintext) - l
 
+# The lines are in order of how the text is actually laid out, not in order of how the pointers reference them, so we need to reorder the offsets by key
 # Remove entries whose keys are strings (UNUSED or other special cases we don't want)
 for key in list(pointer_offset_map.keys()):
     if isinstance(key, str):
         del pointer_offset_map[key]
 
-offsets = [pointer_offset_map[key] for key in sorted(pointer_offset_map.keys())]
-init_text_offsets = list(map(lambda x: pack("<H", x + (2 * (len(offsets))) + ptr_table_offset), offsets))
+offsets = [(pointer_offset_map[key], pointer_length_map[key]) for key in sorted(pointer_offset_map.keys())]
+init_text_offsets = list(map(lambda x: pack("<HH", x[0], x[1]), offsets))
 
 # Generate binary
 
 with open(output_file, 'wb') as bin_file:
+    bin_file.write(pack("<H", len(offsets)))
     init_text_offsets[0] = bytearray(init_text_offsets[0])
     b = reduce( (lambda x, y: x + bytearray(y)), init_text_offsets)
     bin_file.write(b)

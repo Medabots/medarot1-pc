@@ -35,6 +35,8 @@ SCRIPT := $(BASE)/scripts
 TILESET_OUT := $(BUILD)/tilesets
 PTRLISTS_OUT := $(BUILD)/ptrlists
 LISTS_OUT := $(BUILD)/lists
+
+DIALOG_INT := $(BUILD)/intermediate/dialog
 DIALOG_OUT := $(BUILD)/dialog
 
 # Game Source Directories
@@ -90,7 +92,11 @@ TILESET_FILES := $(foreach FILE,$(TILESETS),$(TILESET_OUT)/$(FILE).$(TSET_TYPE))
 PTRLISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(PTRLISTS),$(PTRLISTS_OUT)/$(FILE)_$(VERSION).$(SOURCE_TYPE)))
 LISTS_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(LISTS),$(LISTS_OUT)/$(FILE)_$(VERSION).$(LISTS_TYPE)))
 CREDITS_BIN_FILE := $(BUILD)/$(basename $(word 1, $(notdir $(CREDITS)))).$(CREDITS_TYPE)
+
+# Dialog is split into 2 sets, so we can process intermediate files at once
+DIALOG_INT_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(DIALOG),$(DIALOG_INT)/$(FILE)_$(VERSION).$(DIALOG_TYPE)))
 DIALOG_BIN_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(DIALOG),$(DIALOG_OUT)/$(FILE)_$(VERSION).$(DIALOG_TYPE)))
+DIALOG_ASM_FILES := $(foreach VERSION,$(VERSIONS),$(DIALOG_OUT)/text_table_constants_$(VERSION).$(SOURCE_TYPE))
 
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
@@ -100,7 +106,7 @@ gfx_ADDITIONAL := $(TILESET_FILES)
 data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
 data_lists_ADDITIONAL := $(LISTS_FILES)
 data_credits_ADDITIONAL := $(CREDITS_BIN_FILE)
-data_text_tables_ADDITIONAL := $(DIALOG_BIN_FILES)
+data_text_tables_ADDITIONAL := $(DIALOG_ASM_FILES)
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection
@@ -157,10 +163,15 @@ $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT
 $(CREDITS_BIN_FILE): $(CREDITS) $(SRC)/data/credits.asm | $(BUILD)
 	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^
 
-# build/dialog/*.bin from dialog csv files
+# build/dialog/intermediate/*.bin from dialog csv files
 .SECONDEXPANSION:
-$(DIALOG_OUT)/%.$(DIALOG_TYPE): $(DIALOG_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(CSV_TYPE) $(SRC)/data/text_tables.asm | $(DIALOG_OUT)
+$(DIALOG_INT)/%.$(DIALOG_TYPE): $(DIALOG_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(CSV_TYPE) | $(DIALOG_INT)
 	$(PYTHON) $(SCRIPT)/dialog2bin.py $@ $^ $(subst $(subst .$(CSV_TYPE),,$(<F))_,,$*)
+
+# Use the intermediate files to generate the final dialog file
+# Make has trouble with multiple files in a single rule, so we use a file to indicate these files were generated
+$(DIALOG_OUT)/text_table_constants_%.asm: $(SRC)/data/text_tables.asm $(DIALOG_INT_FILES) | $(DIALOG_OUT)
+	$(PYTHON) $(SCRIPT)/dialogbin2asm.py $@ $(DIALOG_OUT) $* $^
 
 ### Dump Scripts
 
@@ -200,6 +211,9 @@ $(TILESET_OUT):
 
 $(DIALOG_TEXT):
 	mkdir -p $(DIALOG_TEXT)
+
+$(DIALOG_INT):
+	mkdir -p $(DIALOG_INT)
 
 $(DIALOG_OUT):
 	mkdir -p $(DIALOG_OUT)

@@ -1,40 +1,40 @@
+INCLUDE "build/dialog/text_table_constants_{GAMEVERSION}.asm"
+
 SECTION "TextSection0", ROMX[$7e00], BANK[$0c]
 TextSection0:
-  INCBIN "build/dialog/TextSection0_{GAMEVERSION}.bin"
+  INCBIN cTextSection0
 
 SECTION "TextSection1", ROMX[$7e00], BANK[$0d]
 TextSection1:
-  INCBIN "build/dialog/TextSection1_{GAMEVERSION}.bin"
+  INCBIN cTextSection1
 
 SECTION "TextSection2", ROMX[$7e00], BANK[$0e]
 TextSection2:
-  INCBIN "build/dialog/TextSection2_{GAMEVERSION}.bin"
+  INCBIN cTextSection2
 
 SECTION "TextSection3", ROMX[$7e00], BANK[$0f]
 TextSection3:
-  INCBIN "build/dialog/TextSection3_{GAMEVERSION}.bin"
+  INCBIN cTextSection3
 
 SECTION "TextSection4", ROMX[$6000], BANK[$16]
 TextSection4:
-  INCBIN "build/dialog/TextSection4_{GAMEVERSION}.bin"
+  INCBIN cTextSection4
 
 SECTION "TextSection5", ROMX[$7800], BANK[$13]
 TextSection5:
-  INCBIN "build/dialog/TextSection5_{GAMEVERSION}.bin"
+  INCBIN cTextSection5
 
 SECTION "TextSection6", ROMX[$4000], BANK[$18]
 TextSection6:
-  INCBIN "build/dialog/TextSection6_{GAMEVERSION}.bin"
+  INCBIN cTextSection6
 
 SECTION "TextSection7", ROMX[$4000], BANK[$1a]
 TextSection7:
-  INCBIN "build/dialog/TextSection7_{GAMEVERSION}.bin"
+  INCBIN cTextSection7
 
 SECTION "TextSection8", ROMX[$4000], BANK[$1d]
 TextSection8:
-  INCBIN "build/dialog/TextSection8_{GAMEVERSION}.bin"
-
-
+  INCBIN cTextSection8
 
 SECTION "Dialog Text Tables", ROM0[$1e14]
 TextTableBanks:: ; 0x1e14

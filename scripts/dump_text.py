@@ -35,12 +35,11 @@ for info in rom_info:
         text_ptrs = list(zip(banks, [utils.read_short(rom) for i in range(0, entry_count)]))
 
         with open("./game/src/data/text_tables.asm", "w") as f:
+            f.write(f'INCLUDE "build/dialog/text_table_constants_{{GAMEVERSION}}.asm"\n\n')
             for i, entry in enumerate([t for t in text_ptrs if t[0] != 0]):
                 f.write(f'SECTION "TextSection{i}", ROMX[${entry[1]:04x}], BANK[${entry[0]:02x}]\n')
                 f.write(f'TextSection{i}:\n')
-                f.write(f'  INCBIN "build/dialog/TextSection{i}_{{GAMEVERSION}}.bin"\n\n')
-
-            f.write('\n\n')
+                f.write(f'  INCBIN cTextSection{i}\n\n')
 
             f.write(f'SECTION "Dialog Text Tables", ROM0[${txt_bank_ptr:04x}]\n')
             f.write(f'TextTableBanks:: ; 0x{txt_bank_ptr:04x}\n')
