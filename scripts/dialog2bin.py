@@ -3,6 +3,7 @@ from functools import reduce
 from struct import *
 import os
 import csv
+import re
 import sys
 
 sys.path.append(os.path.join(os.path.dirname(__file__), 'common'))
@@ -59,7 +60,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
             continue
 
         if line[idx_text].startswith('<OFFSET'): # A special case that starts in the middle of (probably) a section marked 'UNUSED_'
-            _, src_ptr, offset = line[idx_text].strip('<>').split(':')
+            _, src_ptr, offset = line[idx_text].strip('<').split(">", 1)[0].split(":")
             pointer = int(line[idx_pointer], 16)
             try:
                 pointer_offset_map[pointer] = pointer_offset_map[int(src_ptr, 16)] + int(offset, 16)

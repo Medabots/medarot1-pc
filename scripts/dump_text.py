@@ -194,7 +194,18 @@ for info in rom_info:
                     text[p] = f"<OFFSET:{idx}:{ptr - rom.tell():X}>"
                 else:
                     text[p] = f"<OFFSET:{idx:X}:{ptr - rom.tell():X}>"
-
+                j = 0
+                curr = 0
+                start = ptr - rom.tell()
+                while j < start:
+                    try:
+                        if text[idx][curr] == '<':
+                            while text[idx][curr] != '>':
+                                curr += 1
+                    finally:
+                        j += 1
+                        curr += 1
+                text[p] += text[idx][curr:]
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
