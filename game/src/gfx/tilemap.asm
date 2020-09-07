@@ -1,7 +1,7 @@
 SECTION "Tilemaps", ROMX[$4000], BANK[$1e]
 Tilemaps:
 ; The tilemap pointer table can reference the same data multiple times
-; This data needs to be dumped.
+INCLUDE "build/tilemaps/tilemap_files.asm"
 
 SECTION "Load Tilemaps", ROM0[$E3F]
 LoadTilemap::
