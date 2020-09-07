@@ -46,7 +46,7 @@ LoadTiles:: ; 122A (0:122A)
 .read_next
   ld a, b
   or c
-  jp z, NoDecompressLoadTiles.return
+  ret z
   ld a, [de]
   ld [$c5f5], a
   inc de
@@ -58,7 +58,7 @@ LoadTiles:: ; 122A (0:122A)
 .loop
   ld a, b
   or c
-  jp z, NoDecompressLoadTiles.return
+  ret z
   ld a, [$c5f3]
   dec a
   jp z, .read_next
@@ -145,39 +145,48 @@ LoadTiles:: ; 122A (0:122A)
   inc de
   inc de
   jp .loop
-NoDecompressLoadTiles:
-  ld a, [de]
-  ld c, a
-  inc de
-  ld a, [de]
-  ld b, a
-  inc de
+
+Load1BPPTiles::
+; hl is the vram address to write to.
+; de is the address to copy from.
+; b is the number of tiles to copy.
+  ld c, 8
 .loop
-  ld a, b
-  or c
-  jp z, .return
-  ld a, [de]
   di
-  call WaitLCDController
+
+.wfb
+  ldh a, [hLCDStat]
+  and 2
+  jr nz, .wfb
+
+  ld a, [de]
   ld [hli], a
+  ld [hli], a
+
   ei
+
   inc de
-  dec bc
-  jp .loop
-.return:
+  dec c
+  jr nz, .loop
+  dec b
+  jr nz, Load1BPPTiles
+  
   ret
 
-DecompressAndLoadTiles::
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+  nop
+
+DecompressAndLoadTiles:: ; 12e8 (0:12e8)
   ld [$c650], a ;Store font type
   ld a, b
   ld [$c6d3], a
   xor a
-  ld [$c64e], a
-  ld a, [$c6ce]
-  or a
-  jp nz, .asm_132e
-  ld a, $01
-  ld [$c6ce], a
+  ld [$c64e], a ; "In Progress" flag
   ld a, [$c650]
   ld hl, TilesetTable
   ld d, $00
@@ -199,43 +208,71 @@ DecompressAndLoadTiles::
   ld h, [hl]
   ld l, a
   inc de
-  ld a, h
-  ld [$c5f6], a
-  ld a, l
-  ld [$c5f7], a
-  ld a, [de]
-  ld c, a
-  inc de
-  ld a, [de]
-  ld b, a
-  inc de
-  jp .asm_1342
+  jp NoDecompressLoadTiles
 
-.asm_132e
-  ld a, [$c6d4]
+Load1BPPTilesFrom2D::
+  ld a, $2D
   rst $10
-  ld a, [$c6cf]
-  ld b, a
-  ld a,[$c6d0]
-  ld c, a
-  ld a,[$c6d1]
-  ld d, a
-  ld a,[$c6d2]
-  ld e, a
-
-.asm_1342
-  ld a, [$c6d3]
-  or a
-  jr nz, .asm_135e
-  ld a, b
-  ld [$c6cf], a
-  ld a, c
-  ld [$c6d0], a
-  ld a, d
-  ld [$c6d1], a
-  ld a, e
-  ld [$c6d2], a
-  ld a, $01
-  ld [$c64e], a
+  call Load1BPPTiles
+  ld a, $24
+  rst $10
   ret
+
+LoadTilesFrom2D::
+  ld a, $2D
+  rst $10
+  ld a, [de]
+  inc de
+  call LoadTiles
+  ld a, $24
+  rst $10
+  ret
+
+.end
+REPT $1374 - .end
+  nop
+ENDR
 .asm_135e
+
+SECTION "Load Uncompressed Tiles", ROM0[$20B8] ; Address is at the end of the old control codes
+NoDecompressLoadTiles::
+  ld a, [de]
+  ld c, a
+  inc de
+  ld a, [de]
+  ld b, a
+  inc de
+
+  ld a, c
+  and 1
+  jr z, .loop
+
+  di
+  call WaitLCDController
+  ld a, [de]
+  ld [hli], a
+  ei
+  inc de
+  dec c
+
+.loop
+  ld a, b
+  or c
+  ret z
+  di
+
+.wfb
+  ldh a, [hLCDStat]
+  and 2
+  jr nz, .wfb
+
+  ld a, [de]
+  ld [hli], a
+  inc de
+  ld a, [de]
+  ld [hli], a
+  ei
+  inc de
+  dec bc
+  dec c
+  jr .loop

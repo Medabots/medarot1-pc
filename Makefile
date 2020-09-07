@@ -57,7 +57,7 @@ LISTS_TEXT := $(TEXT)/lists
 CREDITS_TEXT := $(TEXT)/credits
 
 # Source Modules (directories in SRC)
-MODULES := core gfx data text
+MODULES := core gfx data text patch
 
 # Toolchain
 CC := rgbasm

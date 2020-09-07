@@ -1,3 +1,5 @@
+INCLUDE "game/src/common/constants.asm"
+
 SECTION "rst0", ROM0[$0]
   pop hl
   add a ;a = a+a
@@ -7,8 +9,23 @@ SECTION "rst0", ROM0[$0]
   ld l, a ;l = a
   jp hl
 
-SECTION "rst8",ROM0[$8] ;Return, enable interrupt
-  reti
+SECTION "rst8",ROM0[$8] ; HackPredef
+  ld [TempA], a ; 3
+  jp Rst8Cont
+
+SECTION "rst8Cont",ROM0[$62] ;Replaces a bunch of empty space
+Rst8Cont:
+  ld a, [hBank]
+  push af
+  ld a, BANK(HackPredef)
+  rst $10
+  ld a, [TempA]
+  call HackPredef
+  ld [TempA], a
+  pop af
+  rst $10
+  ld a, [TempA]
+  ret
 
 SECTION "rst10, bank swap",ROM0[$10]
   ld [$2000], a
