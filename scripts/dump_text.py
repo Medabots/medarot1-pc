@@ -214,6 +214,6 @@ for info in rom_info:
                 writer.writerow(["Pointer[#version]","Original","Translated"])
                 for p in text:
                     if isinstance(p, str):
-                        writer.writerow([p, text[p], None])
+                        writer.writerow([p, text[p], text[p] if text[p].startswith("=") else None])
                     else:
-                        writer.writerow([hex(p), text[p], None])
+                        writer.writerow([hex(p), text[p], text[p] if text[p].startswith("=") else None])

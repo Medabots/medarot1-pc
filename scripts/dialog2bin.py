@@ -38,7 +38,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
     for line in reader:
         txt = line[idx_text]
     
-        if txt[0] == '#': # Comment
+        if len(txt) > 0 and txt[0] == '#': # Comment
             continue
 
         if txt.startswith('='): # Pointer to existing text
@@ -46,6 +46,9 @@ with open(input_file, 'r', encoding='utf-8') as fp:
             pointer_offset_map[int(line[idx_pointer], 16)] = pointer_offset_map[pointer]
             pointer_length_map[int(line[idx_pointer], 16)] = 0
             continue
+
+        if not txt:
+            txt = f"={line[idx_pointer]}" # This will result in KeyErrors in JP though
 
         if line[idx_text].startswith('<OFFSET'): # A special case that starts in the middle of (probably) a section marked 'UNUSED_'
             _, src_ptr, offset = line[idx_text].strip('<').split(">", 1)[0].split(":")
