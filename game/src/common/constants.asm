@@ -107,6 +107,9 @@ hCGB               EQU $ffe6
 hSGB               EQU $ffe7
 hDMATransfer       EQU $ffe8
 
+hSaveA             EQU $FF90
+hBank              EQU $FF91
+
 ; Joypad
 hJPInputHeldDown   EQU $ff8c
 hJPInputChanged    EQU $ff8d

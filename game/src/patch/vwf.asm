@@ -1,4 +1,5 @@
 INCLUDE "game/src/common/constants.asm"
+INCLUDE "game/src/common/macros.asm"
 
 SECTION "VWF Core Functions", ROM0[$1E44]
 GetNextChar::
@@ -258,6 +259,12 @@ VWFPutStringAutoNarrow::
   pop bc
   pop hl
   jp VWFPutString.skipSettingLength
+
+SECTION "Portraits 0-63", ROMX[$4000], BANK[$2E]
+TilesetPortraits1::
+
+SECTION "Portraits 64-113", ROMX[$4000], BANK[$2F]
+TilesetPortraits2::
 
 SECTION "VWF Drawing Functions", ROMX[$4C00], BANK[$24]
 VWFDrawLetterTable::

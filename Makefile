@@ -133,7 +133,7 @@ data_credits_ADDITIONAL := $(CREDITS_BIN_FILE)
 data_text_tables_ADDITIONAL := $(DIALOG_ASM_FILES)
 
 # Patch Specific
-
+patch_vwf_ADDITIONAL := $(PATCH_TEXT_TILESET_FILES)
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection

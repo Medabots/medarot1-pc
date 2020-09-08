@@ -1,3 +1,6 @@
+INCLUDE "game/src/common/constants.asm"
+INCLUDE "game/src/common/macros.asm"
+
 SECTION "Load Dialogue Font", ROM0[$2B49]
 LoadMainDialogTileset::
   ld a, 3
