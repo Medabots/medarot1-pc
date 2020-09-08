@@ -11,7 +11,8 @@ from common import utils, tilesets
 
 output_file = sys.argv[1]
 input_file = sys.argv[2]
-version_suffix = sys.argv[3] # TODO: Use this
+column_name = sys.argv[3]
+version_suffix = sys.argv[4] # TODO: Use this
 
 # Setup
 
@@ -28,7 +29,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
     reader = csv.reader(fp, delimiter=',', quotechar='"')
     header = next(reader, None)
     idx_pointer = header.index("Pointer[#version]")
-    idx_text = header.index("Original")
+    idx_text = header.index(column_name)
 
     # Keep track of the offset from the start
     bintext = bytearray()
