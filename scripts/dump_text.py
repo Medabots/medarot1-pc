@@ -211,9 +211,9 @@ for info in rom_info:
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(["Pointer[#version]","Original"])
+                writer.writerow(["Pointer[#version]","Original","Translated"])
                 for p in text:
                     if isinstance(p, str):
-                        writer.writerow([p, text[p]])
+                        writer.writerow([p, text[p], text[p] if text[p].startswith("=") else None])
                     else:
-                        writer.writerow([hex(p), text[p]])
+                        writer.writerow([hex(p), text[p], text[p] if text[p].startswith("=") else None])
