@@ -56,6 +56,14 @@ PTRLISTS_TEXT := $(TEXT)/ptrlists
 LISTS_TEXT := $(TEXT)/lists
 CREDITS_TEXT := $(TEXT)/credits
 
+# Patch Specific
+VWF_TSET_SRC_TYPE := 1bpp
+VWF_TSET_TYPE := vwffont
+PATCH_TEXT := $(TEXT)/patch
+PATCH_TEXT_OUT := $(BUILD)/patch
+PATCH_TILESET_TEXT := $(TILESET_TEXT)/patch
+PATCH_TILESET_OUT := $(TILESET_OUT)/patch
+
 # Source Modules (directories in SRC)
 MODULES := core gfx data text patch
 
@@ -91,6 +99,10 @@ LISTS := $(notdir $(basename $(wildcard $(LISTS_TEXT)/*.$(TEXT_TYPE))))
 CREDITS := $(wildcard $(CREDITS_TEXT)/*.$(CSV_TYPE)) # Technically only one file
 DIALOG := $(notdir $(basename  $(wildcard $(DIALOG_TEXT)/*.$(CSV_TYPE))))
 
+## Patch Specific
+PATCH_TEXT_TILESETS := $(notdir $(basename $(wildcard $(PATCH_TILESET_TEXT)/*.$(VWF_TSET_SRC_TYPE).$(RAW_TSET_SRC_TYPE)))) # .1bpp.png -> 1bpp
+PATCH_TILESETS := $(filter-out $(PATCH_TEXT_TILESETS), $(notdir $(basename $(wildcard $(PATCH_TILESET_TEXT)/*.$(RAW_TSET_SRC_TYPE))))) # .png -> 2bpp
+
 # Intermediates
 OBJECTS := $(foreach OBJECT,$(OBJNAMES), $(addprefix $(BUILD)/,$(OBJECT)))
 
@@ -105,6 +117,10 @@ DIALOG_INT_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(DIALOG),$(DIA
 DIALOG_BIN_FILES := $(foreach VERSION,$(VERSIONS),$(foreach FILE,$(DIALOG),$(DIALOG_OUT)/$(FILE)_$(VERSION).$(DIALOG_TYPE)))
 DIALOG_ASM_FILES := $(foreach VERSION,$(VERSIONS),$(DIALOG_OUT)/text_table_constants_$(VERSION).$(SOURCE_TYPE))
 
+## Patch Specific
+PATCH_TEXT_TILESET_FILES := $(foreach FILE,$(PATCH_TEXT_TILESETS),$(PATCH_TILESET_OUT)/$(FILE))
+PATCH_TILESET_FILES := $(foreach FILE,$(PATCH_TILESETS),$(PATCH_TILESET_OUT)/$(FILE).$(TSET_TYPE))
+
 # Additional dependencies, per module granularity (i.e. story, gfx, core) or per file granularity (e.g. story_text_tables_ADDITIONAL)
 # core_ADDITIONAL :=
 # core_main_ADDITIONAL :=
@@ -115,6 +131,9 @@ data_ptrlists_ADDITIONAL := $(PTRLISTS_FILES)
 data_lists_ADDITIONAL := $(LISTS_FILES)
 data_credits_ADDITIONAL := $(CREDITS_BIN_FILE)
 data_text_tables_ADDITIONAL := $(DIALOG_ASM_FILES)
+
+# Patch Specific
+
 
 .PHONY: $(VERSIONS) all clean default
 default: parts_collection
@@ -188,6 +207,19 @@ $(DIALOG_INT)/%.$(DIALOG_TYPE): $(DIALOG_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(C
 $(DIALOG_OUT)/text_table_constants_%.asm: $(SRC)/data/text_tables.asm $(DIALOG_INT_FILES) | $(DIALOG_OUT)
 	$(PYTHON) $(SCRIPT)/dialogbin2asm.py $@ $(DIALOG_OUT) $* $^
 
+## Patch Specific
+$(PATCH_TILESET_OUT)/%.$(VWF_TSET_TYPE): $(PATCH_TILESET_TEXT)/%.$(VWF_TSET_SRC_TYPE) | $(PATCH_TILESET_OUT)
+	cp $< $@
+
+$(PATCH_TILESET_OUT)/%.$(TSET_TYPE): $(PATCH_TILESET_OUT)/%.$(TSET_SRC_TYPE) | $(PATCH_TILESET_OUT)
+	$(PYTHON) $(SCRIPT)/tileset2malias.py $< $@
+
+$(PATCH_TILESET_OUT)/%.$(VWF_TSET_SRC_TYPE): $(PATCH_TILESET_TEXT)/%.$(VWF_TSET_SRC_TYPE).$(RAW_TSET_SRC_TYPE) | $(PATCH_TILESET_OUT)
+	$(CCGFX) $(CCGFX_ARGS) -d 1 -o $@ $<
+
+$(PATCH_TILESET_OUT)/%.$(TSET_SRC_TYPE): $(PATCH_TILESET_TEXT)/%.$(RAW_TSET_SRC_TYPE) | $(PATCH_TILESET_OUT)
+	$(CCGFX) $(CCGFX_ARGS) -d 2 -o $@ $<
+
 ### Dump Scripts
 
 .PHONY: dump dump_free dump_tilesets dump_tilemaps dump_text dump_ptrlists dump_lists dump_credits
@@ -259,3 +291,6 @@ $(LISTS_OUT):
 
 $(CREDITS_TEXT):
 	mkdir -p $(CREDITS_TEXT)
+
+$(PATCH_TILESET_OUT):
+	mkdir -p $(PATCH_TILESET_OUT)
