@@ -22,7 +22,7 @@ entry_count = rom_info[3]
 
 with open(filename, 'rb') as rom, open(f"./text/credits/Credits.csv", "w", encoding="utf-8") as fp:
     writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-    writer.writerow(["Pointer","VRAMOffset","Original"])
+    writer.writerow(["Pointer","VRAMOffset","Original", "Translated"])
     
     rom.seek(text_ptr_table)
     pointers = [(rom.tell(), utils.read_short(rom)) for i in range(0, entry_count)]
@@ -70,4 +70,4 @@ with open(filename, 'rb') as rom, open(f"./text/credits/Credits.csv", "w", encod
             else: # Not found, print literal
                 t += f"<${b:02X}>"
 
-        writer.writerow([f'0x{pointer_tbl:X}', f'0x{vram_off:X}', t])
+        writer.writerow([f'0x{pointer_tbl:X}', f'0x{vram_off:X}', t, None])
