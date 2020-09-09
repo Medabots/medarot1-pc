@@ -96,8 +96,12 @@ with open("baserom_parts_collection.gb", "rb") as rom:
                 print("Duplicate")
             if ptrfile:
                 ptrfile.write(f"{i:02X}={os.path.basename(fname)}\n")
+
+
+        for fname in tilemap_files:
             if tileset_file:
                 tileset_file.write(f"{fname}=MainDialog,MainSpecial\n")
+
     finally:
         if ptrfile:
             ptrfile.close()
