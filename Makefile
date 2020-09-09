@@ -195,7 +195,7 @@ $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT
 
 # build/credits.bin from Credits.csv
 $(CREDITS_BIN_FILE): $(CREDITS) $(SRC)/data/credits.asm | $(BUILD)
-	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^ "Original"
+	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^ "Translated"
 
 # build/dialog/intermediate/*.bin from dialog csv files
 .SECONDEXPANSION:
