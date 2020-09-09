@@ -11,6 +11,7 @@ from common import utils, tilesets
 output_file = sys.argv[1]
 input_file = sys.argv[2]
 data_file = sys.argv[3]
+column_name = sys.argv[4]
 
 char_table = utils.reverse_dict(utils.merge_dicts([
         tilesets.get_tileset("MainSpecial"),
@@ -38,7 +39,7 @@ with open(input_file, 'r', encoding='utf-8') as fp:
     header = next(reader, None)
     idx_pointer = header.index("Pointer")
     idx_vramoff = header.index("VRAMOffset")
-    idx_text = header.index("Original")
+    idx_text = header.index(column_name)
 
     # Keep track of the offset from the start
     offsets = [0]
@@ -46,9 +47,13 @@ with open(input_file, 'r', encoding='utf-8') as fp:
     for line in reader:
         if line[0][0] == '#': # Comment
             continue
+
         vram_offset = int(line[idx_vramoff], 16)
         txt = line[idx_text]
         bintext += bytearray(pack("<H", vram_offset))
+
+        if not txt:
+            txt = f"={line[idx_pointer]}" # This will result in KeyErrors in JP though
         
         length = len(txt)
         i = 0

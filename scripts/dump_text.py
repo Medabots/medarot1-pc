@@ -162,7 +162,7 @@ for info in rom_info:
                         t = "<IGNORED>"
                         #for b in text_bytes:
                         #    t += f"<${b:02X}>"
-                    if queued_ptrs_write and not t.startswith("<IGNORED>") or (isinstance(p, str) and p.startswith("UNUSED_")):
+                    if queued_ptrs_write and not t.startswith("<IGNORED>") or (isinstance(p, str) and p.startswith("UNUSED")):
                         ptrs.write(queued_ptrs_write)
                     
                     text[p] = t
@@ -170,7 +170,7 @@ for info in rom_info:
                     if rom.tell() in pointers.values() or rom.tell() > last_ptr:
                         break
 
-                    p = f"UNUSED_{counter:02}"
+                    p = f"UNUSED{counter:02X}"
                     counter += 1
                     pointer_lengths[p] = 0xff
 
@@ -211,9 +211,9 @@ for info in rom_info:
 
             with open(f"./text/dialog/TextSection{i}.csv", "w", encoding="utf-8") as fp:
                 writer = csv.writer(fp, lineterminator='\n', delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-                writer.writerow(["Pointer[#version]","Original"])
+                writer.writerow(["Pointer[#version]","Original","Translated"])
                 for p in text:
                     if isinstance(p, str):
-                        writer.writerow([p, text[p]])
+                        writer.writerow([p, text[p], text[p] if text[p].startswith("=") else None])
                     else:
-                        writer.writerow([hex(p), text[p]])
+                        writer.writerow([hex(p), text[p], text[p] if text[p].startswith("=") else None])
