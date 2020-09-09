@@ -195,12 +195,12 @@ $(LISTS_OUT)/%.$(LISTS_TYPE): $(LISTS_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(TEXT
 
 # build/credits.bin from Credits.csv
 $(CREDITS_BIN_FILE): $(CREDITS) $(SRC)/data/credits.asm | $(BUILD)
-	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^ "Original"
+	$(PYTHON) $(SCRIPT)/credits2bin.py $@ $^ "Translated"
 
 # build/dialog/intermediate/*.bin from dialog csv files
 .SECONDEXPANSION:
 $(DIALOG_INT)/%.$(DIALOG_TYPE): $(DIALOG_TEXT)/$$(word 1, $$(subst _, ,$$*)).$(CSV_TYPE) | $(DIALOG_INT)
-	$(PYTHON) $(SCRIPT)/dialog2bin.py $@ $^ "Original" $(subst $(subst .$(CSV_TYPE),,$(<F))_,,$*)
+	$(PYTHON) $(SCRIPT)/dialog2bin.py $@ $^ "Translated" $(subst $(subst .$(CSV_TYPE),,$(<F))_,,$*)
 
 # Use the intermediate files to generate the final dialog file
 # Make has trouble with multiple files in a single rule, so we use a file to indicate these files were generated
