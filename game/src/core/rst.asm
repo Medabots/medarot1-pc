@@ -29,12 +29,13 @@ Rst8Cont:
   ret
 
 SECTION "rst10, bank swap",ROM0[$10]
+  ld [hBank], a
   ld [$2000], a
   ret
 
 SECTION "rst18",ROM0[$18] ;Bank swap from memory
   ld a, [$c6e0]
-  ld [$2000], a
+  rst $10
   ret
 
 SECTION "rst20",ROM0[$20]
@@ -46,9 +47,9 @@ SECTION "rst20",ROM0[$20]
 
 SECTION "rst28",ROM0[$28] ; hl += a
   add l
-  ld l, a
-  ret nc 
-  inc h
+  ld l, a ;l += a
+  ret nc ;Return if not 'c'
+  inc h ;h++
   ret
 
 SECTION "rst30",ROM0[$30] ; hl = [hl + a*2], useful for loading data from pointer tables
@@ -59,8 +60,8 @@ SECTION "rst30",ROM0[$30] ; hl = [hl + a*2], useful for loading data from pointe
   ld l, a
   ret
 
-SECTION "rst38",ROM0[$38] ; hl = [hl]
+SECTION "rst38",ROM0[$38]
   ld a, [hli]
-  ld l, [hl]
-  ld h, a
+  ld h, [hl]
+  ld l, a
   ret
