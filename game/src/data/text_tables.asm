@@ -1,40 +1,39 @@
 INCLUDE "build/dialog/text_table_constants_{GAMEVERSION}.asm"
 
-SECTION "TextSection0", ROMX[$7e00], BANK[$0c]
+SECTION "Pointers", ROMX[$4000], BANK[$18]
 TextSection0:
   INCBIN cTextSection0
-
-SECTION "TextSection1", ROMX[$7e00], BANK[$0d]
 TextSection1:
   INCBIN cTextSection1
-
-SECTION "TextSection2", ROMX[$7e00], BANK[$0e]
 TextSection2:
   INCBIN cTextSection2
-
-SECTION "TextSection3", ROMX[$7e00], BANK[$0f]
 TextSection3:
   INCBIN cTextSection3
-
-SECTION "TextSection4", ROMX[$6000], BANK[$16]
 TextSection4:
   INCBIN cTextSection4
-
-SECTION "TextSection5", ROMX[$7800], BANK[$13]
 TextSection5:
   INCBIN cTextSection5
-
-SECTION "TextSection6", ROMX[$4000], BANK[$18]
 TextSection6:
   INCBIN cTextSection6
-
-SECTION "TextSection7", ROMX[$4000], BANK[$1a]
 TextSection7:
   INCBIN cTextSection7
-
-SECTION "TextSection8", ROMX[$4000], BANK[$1d]
 TextSection8:
   INCBIN cTextSection8
+
+SECTION "Text0", ROMX[$4000], BANK[$1a]
+Text0:
+  INCBIN cText0
+
+SECTION "Text1", ROMX[$4000], BANK[$1d]
+Text1:
+  INCBIN cText1
+
+;; These sections are all partially used, so we don't risk using them
+; SECTION "TextSection1", ROMX[$7e00], BANK[$0d]
+; SECTION "TextSection2", ROMX[$7e00], BANK[$0e]
+; SECTION "TextSection3", ROMX[$7e00], BANK[$0f]
+; SECTION "TextSection4", ROMX[$6000], BANK[$16]
+; SECTION "TextSection5", ROMX[$7800], BANK[$13]
 
 SECTION "Dialog Text Tables", ROM0[$1e14]
 TextTableBanks:: ; 0x1e14

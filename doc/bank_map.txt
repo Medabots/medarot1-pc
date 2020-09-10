@@ -10,24 +10,24 @@
 09:
 0A:
 0B:
-0C: TextSection0
-0D: TextSection1
-0E: TextSection2
-0F: TextSection3
+0C: TextSection0 (unused)
+0D: TextSection1 (unused)
+0E: TextSection2 (unused)
+0F: TextSection3 (unused)
 10:
 11:
 12:
-13: TextSection5
+13: TextSection5 (unused)
 14:
 15:
-16: TextSection4
+16: TextSection4 (unused)
 17:
-18: TextSection6
+18: Pointers for all text sections
 19:
-1A: TextSection7
+1A: Text Bank 0
 1B:
 1C:
-1D: TextSection8
+1D: Text Bank 1
 1E: Tilemaps
 1F: (Last bank used by game)
 20: Tilesets
