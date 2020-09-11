@@ -8,8 +8,8 @@ Main::
 
 ; Disable all interrupts
   xor a
-  ld [hRegIF], a
-  ld [hRegIE], a
+  ldh [hRegIF], a
+  ldh [hRegIE], a
   ld sp, $fffe
 
 ; Enable SRAM
@@ -18,7 +18,7 @@ Main::
 
 ; Swap to bank 1
   ld a, $1
-  ld [$2000], a
+  rst $10
 
 ; Switch to SRAM Bank 0
   ld a, $0
@@ -112,5 +112,7 @@ Main::
   xor a
   ld [$c5a1], a
   jp .gameLoop
+  nop
+  nop
 ; 0x451
 

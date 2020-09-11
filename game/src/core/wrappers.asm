@@ -37,12 +37,14 @@ Wrapper_5b7::
 
 Wrapper_5ba::
   ld a, $1b
-  ld [$2000], a
+  rst $10
   call $42CC
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x5c6
 
 Wrapper_5c6::
@@ -210,13 +212,15 @@ Wrapper_642::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $01
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $4D60
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x65b
 
 Wrapper_65b::
@@ -463,37 +467,45 @@ Wrapper_733::
 
 Wrapper_738::
   ld a, $0b
-  ld [$2000], a
+  rst $10
   rst $18
   ret
+  nop
+  nop
 ; 0x73f
 
 Wrapper_73f::
   ld a, $1b
-  ld [$2000], a
+  rst $10
   call $4000
   rst $18
   ret
+  nop
+  nop
 ; 0x749
 
 Wrapper_749::
   ld a, $02
-  ld [$2000], a
+  rst $10
   call $7B8B
   rst $18
   ret
+  nop
+  nop
 ; 0x753
 
 Wrapper_753::
   push af
   ld a, $02
-  ld [$2000], a
+  rst $10
   pop af
   call $7675
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x761
 
 Wrapper_761::
@@ -575,13 +587,15 @@ Wrapper_79f::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $76F2
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x7b8
 
 Wrapper_7b8::
@@ -589,7 +603,7 @@ Wrapper_7b8::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $4CB1
@@ -597,6 +611,8 @@ Wrapper_7b8::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x7d3
 
 Wrapper_7d3::
@@ -604,7 +620,7 @@ Wrapper_7d3::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $77D0
@@ -612,6 +628,8 @@ Wrapper_7d3::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x7ee
 
 Wrapper_7ee::
@@ -619,7 +637,7 @@ Wrapper_7ee::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7805
@@ -627,6 +645,8 @@ Wrapper_7ee::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x809
 
 Wrapper_809::
@@ -634,7 +654,7 @@ Wrapper_809::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7BDA
@@ -642,26 +662,32 @@ Wrapper_809::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x824
 
 Wrapper_824::
   push af
   ld a, $02
-  ld [$2000], a
+  rst $10
   pop af
   call $4351
   rst $18
   ret
+  nop
+  nop
 ; 0x830
 
 Wrapper_830::
   push af
   ld a, $02
-  ld [$2000], a
+  rst $10
   pop af
   call $445F
   rst $18
   ret
+  nop
+  nop
 ; 0x83c
 
 Wrapper_83c::
@@ -669,7 +695,7 @@ Wrapper_83c::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7BB6
@@ -677,6 +703,8 @@ Wrapper_83c::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x857
 
 Wrapper_857::
@@ -684,7 +712,7 @@ Wrapper_857::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7BF1
@@ -692,6 +720,8 @@ Wrapper_857::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x872
 
 Wrapper_872::
@@ -713,10 +743,12 @@ Wrapper_87b::
 
 Wrapper_880::
   ld a, $02
-  ld [$2000], a
+  rst $10
   call $7BA9
   rst $18
   ret
+  nop
+  nop
 ; 0x88a
 
 Wrapper_88a::
@@ -740,32 +772,38 @@ Wrapper_894::
 Wrapper_899::
   push af
   ld a, $05
-  ld [$2000], a
+  rst $10
   pop af
   rst $18
   ret
+  nop
+  nop
 ; 0x8a2
 
 Wrapper_8a2::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4029
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x8b0
 
 Wrapper_8b0::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4071
   rst $18
   ret
+  nop
+  nop
 ; 0x8bc
 
 Wrapper_8bc::
@@ -773,7 +811,7 @@ Wrapper_8bc::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $79A4
@@ -781,6 +819,8 @@ Wrapper_8bc::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x8d7
 
 Wrapper_8d7::
@@ -788,7 +828,7 @@ Wrapper_8d7::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7A05
@@ -796,6 +836,8 @@ Wrapper_8d7::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x8f2
 
 Wrapper_8f2::
@@ -803,7 +845,7 @@ Wrapper_8f2::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $6DE7
@@ -811,6 +853,8 @@ Wrapper_8f2::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x90d
 
 Wrapper_90d::
@@ -818,7 +862,7 @@ Wrapper_90d::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $6EC2
@@ -826,40 +870,48 @@ Wrapper_90d::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x928
 
 Wrapper_928::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4119
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x936
 
 Wrapper_936::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $41A5
   rst $18
   ret
+  nop
+  nop
 ; 0x942
 
 Wrapper_942::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4317
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x950
 
 Wrapper_950::
@@ -867,7 +919,7 @@ Wrapper_950::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $435A
@@ -875,6 +927,8 @@ Wrapper_950::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x96b
 
 Wrapper_96b::
@@ -947,37 +1001,43 @@ Wrapper_9a0::
 Wrapper_9a5::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $40E4
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x9b3
 
 Wrapper_9b3::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4247
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x9c1
 
 Wrapper_9c1::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4434
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0x9cf
 
 Wrapper_9cf::
@@ -985,7 +1045,7 @@ Wrapper_9cf::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $7C37
@@ -993,6 +1053,8 @@ Wrapper_9cf::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0x9ea
 
 Wrapper_9ea::
@@ -1012,21 +1074,25 @@ Wrapper_9eb::
 Wrapper_9f5::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $43B3
   rst $18
   ret
+  nop
+  nop
 ; 0xa01
 
 Wrapper_a01::
   push af
   ld a, $01
-  ld [$2000], a
+  rst $10
   pop af
   call $7831
   rst $18
   ret
+  nop
+  nop
 ; 0xa0d
 
 Wrapper_a0d::
@@ -1126,23 +1192,27 @@ Wrapper_a78::
 Wrapper_a82::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $4477
   push af
   rst $18
   pop af
   ret
+  nop
+  nop
 ; 0xa90
 
 Wrapper_a90::
   push af
   ld a, $1b
-  ld [$2000], a
+  rst $10
   pop af
   call $44AB
   rst $18
   ret
+  nop
+  nop
 ; 0xa9c
 
 Wrapper_a9c::
@@ -1175,10 +1245,12 @@ Wrapper_aad::
 
 Wrapper_ab5::
   ld a, $02
-  ld [$2000], a
+  rst $10
   call $52D5
   rst $18
   ret
+  nop
+  nop
 ; 0xabf
 
 Wrapper_abf::
@@ -1204,7 +1276,7 @@ Wrapper_ace::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $01
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   pop af
   call $6898
@@ -1212,6 +1284,8 @@ Wrapper_ace::
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xae9
 
 Wrapper_ae9::
@@ -1224,136 +1298,160 @@ Wrapper_aee::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $4521
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb07
 
 Wrapper_b07::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $4AD0
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb20
 
 Wrapper_b20::
   ld a, $02
-  ld [$2000], a
+  rst $10
   call $7DB7
   rst $18
   ret
+  nop
+  nop
 ; 0xb2a
 
 Wrapper_b2a::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $02
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $7DDB
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb43
 
 Wrapper_b43::
   ld a, $02
-  ld [$2000], a
+  rst $10
   call $7EEA
   rst $18
   ret
+  nop
+  nop
 ; 0xb4d
 
 Wrapper_b4d::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $4FDF
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb66
 
 Wrapper_b66::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $53CF
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb7f
 
 Wrapper_b7f::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $531A
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xb98
 
 Wrapper_b98::
   ld a, $1b
-  ld [$2000], a
+  rst $10
   call $5478
   rst $18
   ret
+  nop
+  nop
 ; 0xba2
 
 Wrapper_ba2::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $55BA
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xbbb
 
 Wrapper_bbb::
   ld a, $1b
-  ld [$2000], a
+  rst $10
   call $574A
   rst $18
   ret
+  nop
+  nop
 ; 0xbc5
 
 Wrapper_bc5::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $1b
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $53E7
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xbde
 
 Wrapper_bde::
@@ -1364,40 +1462,48 @@ Wrapper_bde::
 
 Wrapper_be3::
   ld a, $07
-  ld [$2000], a
+  rst $10
   call $60B6
   rst $18
   ret
+  nop
+  nop
 ; 0xbed
 
 Wrapper_bed::
   ld a, $1b
-  ld [$2000], a
+  rst $10
   call $5772
   rst $18
   ret
+  nop
+  nop
 ; 0xbf7
 
 Wrapper_bf7::
   push af
   ld a, $01
-  ld [$2000], a
+  rst $10
   pop af
   call $7607
   rst $18
   ret
+  nop
+  nop
 ; 0xc03
 
 Wrapper_c03::
   ld a, [$c6e0]
   ld [$c6e1], a
   ld a, $12
-  ld [$2000], a
+  rst $10
   ld [$c6e0], a
   call $689F
   ld a, [$c6e1]
   ld [$c6e0], a
   rst $18
   ret
+  nop
+  nop
 ; 0xc1c
 
