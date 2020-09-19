@@ -554,8 +554,8 @@ MiscBankSwaps_13:
   ld a, [hl]
   ld [SerIO_ConnectionTestResult], a
   ret
- .asm_2f11
 ; 0x2f11
+ .asm_2f11
 
 SECTION "MiscBankSwaps_14", ROM0[$2F1C]
 MiscBankSwaps_14:
