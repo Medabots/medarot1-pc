@@ -5,7 +5,7 @@ SECTION "MiscBankSwaps_00", ROM0[$2350]
 MiscBankSwaps_00:
  ; 2350 (0:2350)
   ld a, $12
-  rst $10
+  ld [$2000], a
   ld a, [$c8f9]
   ld hl, $417c
   ld b, $00
@@ -17,15 +17,13 @@ MiscBankSwaps_00:
   ld [$c933], a
   call $3750
   ret
-  nop
-  nop
 ; 0x236b
 
 SECTION "MiscBankSwaps_02", ROM0[$2951]
 MiscBankSwaps_02:
  ; 2951 (0:2951)
   ld a, $0b
-  rst $10
+  ld [$2000], a
   xor a
   ld [SerIO_ConnectionTestResult], a
   ld a, [$c6ce]
@@ -37,7 +35,7 @@ MiscBankSwaps_02:
   ld [$c6d6], a
 .asm_296a
   ld a, $0b
-  rst $10
+  ld [$2000], a
   push bc
   ld hl, $7110
   sla c
@@ -82,10 +80,6 @@ MiscBankSwaps_02:
   inc a
   ld [$c6d6], a
   jp MiscBankSwaps_02.asm_296a
-  nop
-  nop
-  nop
-  nop
 ; 0x29bf
 .asm_29bf
 
@@ -94,7 +88,7 @@ MiscBankSwaps_04:
  ; 29c3 (0:29c3)
   ld a, $0b
   ld [$c6d4], a
-  rst $10
+  ld [$2000], a
   ld a, [hli]
   ld h, a
   sub $40
@@ -102,7 +96,7 @@ MiscBankSwaps_04:
   push af
   ld a, $11
   ld [$c6d4], a
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $45be
   jr .asm_29e4
@@ -132,7 +126,7 @@ MiscBankSwaps_04:
   dec a
   ld [$c6d3], a
   ld a, [$c6d4]
-  rst $10
+  ld [$2000], a
   push bc
   ld a, [$c6d1]
   ld h, a
@@ -173,12 +167,6 @@ MiscBankSwaps_04:
   inc a
   ld [$c6d6], a
   jp MiscBankSwaps_02.asm_296a
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
 ; 0x2a60
 .asm_2a60
 
@@ -186,7 +174,7 @@ SECTION "MiscBankSwaps_07", ROM0[$2A65]
 MiscBankSwaps_07:
  ; 2a65 (0:2a65)
   ld a, $10
-  rst $10
+  ld [$2000], a
   ld a, [$c92c]
   ld h, a
   ld a, [$c92d]
@@ -234,8 +222,6 @@ MiscBankSwaps_07:
   ld a, [hli]
   ld [$c658], a
   ret
-  nop
-  nop
 ; 0x2ab3
 .asm_2ab3
 
@@ -243,7 +229,7 @@ SECTION "MiscBankSwaps_08", ROM0[$2AE9]
 MiscBankSwaps_08:
  ; 2ae9 (0:2ae9)
   ld a, $03
-  rst $10
+  ld [$2000], a
   ld a, [$c0d8]
   ld b, $00
   ld c, a
@@ -262,7 +248,7 @@ MiscBankSwaps_08:
   add b
   ld [$c651], a
   ld a, $10
-  rst $10
+  ld [$2000], a
   ld a, [$c92f]
   ld h, a
   ld a, [$c930]
@@ -290,24 +276,18 @@ MiscBankSwaps_08:
   ld a, [hli]
   ld [$c650], a
   ld a, $03
-  rst $10
+  ld [$2000], a
   call $4000
   ld a, $01
   ld [SerIO_ConnectionTestResult], a
   ret
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
 ; 0x2b49
 
 SECTION "MiscBankSwaps_0B", ROM0[$2B7E]
 MiscBankSwaps_0B:
  ; 2b7e (0:2b7e)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, $c933
   ld a, [$c936]
   cp $ff
@@ -331,7 +311,7 @@ MiscBankSwaps_0B:
   ld a, [hli]
   ld [$c650], a
   ld a, $12
-  rst $10
+  ld [$2000], a
   ld hl, $429c
   ld b, $00
   ld a, [$c8f9]
@@ -340,10 +320,6 @@ MiscBankSwaps_0B:
   ld a, [hl]
   ld [$c64f], a
   ret
-  nop
-  nop
-  nop
-  nop
 ; 0x2bbf
 .asm_2bbf
 
@@ -351,7 +327,7 @@ SECTION "MiscBankSwaps_0D", ROM0[$2C03]
 MiscBankSwaps_0D:
  ; 2c03 (0:2c03)
   ld a, $14
-  rst $10
+  ld [$2000], a
   ld hl, $4000
   ld de, $9010
   ld bc, $100
@@ -360,15 +336,13 @@ MiscBankSwaps_0D:
   inc a
   ld [$c740], a
   ret
-  nop
-  nop
 ; 0x2c1c
 
 SECTION "MiscBankSwaps_0E", ROM0[$2C1C]
 MiscBankSwaps_0E:
  ; 2c1c (0:2c1c)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld a, [$c753]
   ld hl, $63e2
   ld b, $00
@@ -399,7 +373,7 @@ MiscBankSwaps_0E:
   sla c
   rl b
   ld a, $14
-  rst $10
+  ld [$2000], a
   ld hl, $4000
   add hl, bc
   ld de, $9110
@@ -411,17 +385,13 @@ MiscBankSwaps_0E:
   xor a
   ld [$c741], a
   ret
-  nop
-  nop
-  nop
-  nop
 ; 0x2c74
 
 SECTION "MiscBankSwaps_10", ROM0[$2C74]
 MiscBankSwaps_10:
  ; 2c74 (0:2c74)
   ld a, $1b
-  rst $10
+  ld [$2000], a
   ld a, [$c752]
   ld b, $00
   ld c, a
@@ -455,8 +425,6 @@ MiscBankSwaps_10:
   ld a, $ff
   ld [$c740], a
   ret
-  nop
-  nop
 ; 0x2cbb
 .asm_2cbb
 
@@ -464,7 +432,7 @@ SECTION "MiscBankSwaps_11", ROM0[$2D07]
 MiscBankSwaps_11:
  ; 2d07 (0:2d07)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld a, [$c753]
   ld hl, $63e2
   ld b, $00
@@ -523,15 +491,13 @@ MiscBankSwaps_11:
   pop hl
   call PutString
   ret
-  nop
-  nop
 ; 0x2d6e
 
 SECTION "MiscBankSwaps_12", ROM0[$2D6E]
 MiscBankSwaps_12:
  ; 2d6e (0:2d6e)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld a, [$c753]
   ld hl, $63e2
   ld b, $00
@@ -554,15 +520,13 @@ MiscBankSwaps_12:
   dec b
   jr nz, .asm_2d8c
   ret
-  nop
-  nop
 ; 0x2d93
 
 SECTION "MiscBankSwaps_13", ROM0[$2EDE]
 MiscBankSwaps_13:
  ; 2ede (0:2ede)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, .asm_2f11
   ld d, $00
   ld e, b
@@ -590,8 +554,6 @@ MiscBankSwaps_13:
   ld a, [hl]
   ld [SerIO_ConnectionTestResult], a
   ret
-  nop
-  nop
 ; 0x2f11
  .asm_2f11
 
@@ -599,7 +561,7 @@ SECTION "MiscBankSwaps_14", ROM0[$2F1C]
 MiscBankSwaps_14:
  ; 2f1c (0:2f1c)
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, .asm_2f53
   ld d, $00
   ld e, b
@@ -629,15 +591,13 @@ MiscBankSwaps_14:
   ld a, [hl]
   ld [SerIO_ConnectionTestResult], a
   ret
-  nop
-  nop
 ; 0x2f53
 .asm_2f53
 
 SECTION "MiscBankSwaps_15", ROM0[$2F64]
 MiscBankSwaps_15:
  ; 2f64 (0:2f64)
-  rst $10
+  ld [$2000], a
   ld hl, .asm_3020
   ld b, $00
   ld a, [$a00e]
@@ -735,8 +695,6 @@ MiscBankSwaps_15:
   ld bc, $992b
   call PutString
   ret
-  nop
-  nop
 ; 0x3020
 .asm_3020
 
@@ -744,7 +702,7 @@ SECTION "MiscBankSwaps_16", ROM0[$3027]
 MiscBankSwaps_16:
  ; 3027 (0:3027)
   ld a, $08
-  rst $10
+  ld [$2000], a
   pop af
   ld b, $00
   ld c, a
@@ -765,8 +723,6 @@ MiscBankSwaps_16:
   ld bc, $40
   call CopyVRAMData
   ret
-  nop
-  nop
 ; 0x3053
 
 SECTION "MiscBankSwaps_19", ROM0[$3244]
@@ -774,7 +730,7 @@ MiscBankSwaps_19:
  ; 3244 (0:3244)
   push af
   ld a, $0a
-  rst $10
+  ld [$2000], a
   pop af
   ld b, $00
   ld c, a
@@ -799,21 +755,17 @@ MiscBankSwaps_19:
   ld bc, $100
   call CopyVRAMData
   ret
-  nop
-  nop
 ; 0x3279
 
 SECTION "MiscBankSwaps_1A", ROM0[$3279]
 MiscBankSwaps_1A:
  ; 3279 (0:3279)
   ld a, $0a
-  rst $10
+  ld [$2000], a
   ld hl, $7900
   ld bc, $1a0
   call CopyVRAMData
   ret
-  nop
-  nop
 ; 0x3288
 
 SECTION "MiscBankSwaps_2B", ROM0[$332e]
@@ -822,7 +774,7 @@ MiscBankSwaps_2B:
   push af
   ld b, $0c
   add b
-  rst $10
+  ld [$2000], a
   ld b, $00
   sla c
   rl b
@@ -850,15 +802,13 @@ MiscBankSwaps_2B:
 .asm_3366
   call CopyVRAMData
   ret
-  nop
-  nop
 ; 0x336a
 
 SECTION "MiscBankSwaps_1D", ROM0[$336D]
 MiscBankSwaps_1D:
  ; 336d (0:336d)
   ld a, $0b
-  rst $10
+  ld [$2000], a
   ld hl, $4000
   ld bc, $90
   call CopyVRAMData
@@ -866,8 +816,6 @@ MiscBankSwaps_1D:
   pop de
   pop hl
   ret
-  nop
-  nop
 ; 0x337f
 
 SECTION "MiscBankSwaps_1E", ROM0[$337F]
@@ -875,7 +823,7 @@ MiscBankSwaps_1E:
  ; 337f (0:337f)
   push af
   ld a, $17
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $66d4
   ld b, $00
@@ -895,8 +843,6 @@ MiscBankSwaps_1E:
   dec b
   jr nz, .asm_3399
   ret
-  nop
-  nop
 ; 0x33a0
 
 SECTION "MiscBankSwaps_20", ROM0[$3591]
@@ -907,7 +853,7 @@ MiscBankSwaps_20:
   push bc
   push af
   ld a, $17
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $6e30
   ld b, $00
@@ -929,8 +875,6 @@ MiscBankSwaps_20:
   pop de
   pop hl
   ret
-  nop
-  nop
 ; 0x35c0
 
 SECTION "MiscBankSwaps_21", ROM0[$35C0]
@@ -941,7 +885,7 @@ MiscBankSwaps_21:
   push bc
   push af
   ld a, $17
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $6d50
   ld b, $00
@@ -970,8 +914,6 @@ MiscBankSwaps_21:
   pop de
   pop hl
   ret
-  nop
-  nop
 ; 0x35f1
 
 SECTION "MiscBankSwaps_22", ROM0[$35F1]
@@ -984,7 +926,7 @@ MiscBankSwaps_22:
   ld de, $a420
 .asm_35fb
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, $4
   add hl, de
   ld a, [hl]
@@ -1085,8 +1027,6 @@ MiscBankSwaps_22:
   jr nz, .asm_368c
   pop de
   ret
-  nop
-  nop
 ; 0x3694
 
 SECTION "MiscBankSwaps_23", ROM0[$3694]
@@ -1095,7 +1035,7 @@ MiscBankSwaps_23:
   push de
   push af
   ld a, $17
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $72b4
   ld b, $00
@@ -1117,8 +1057,6 @@ MiscBankSwaps_23:
   jr nz, .asm_36b4
   pop de
   ret
-  nop
-  nop
 ; 0x36bc
 
 SECTION "MiscBankSwaps_24", ROM0[$36BC]
@@ -1127,7 +1065,7 @@ MiscBankSwaps_24:
   push hl
   push de
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, $737c
   ld d, $00
   ld e, b
@@ -1153,8 +1091,6 @@ MiscBankSwaps_24:
   pop de
   pop hl
   ret
-  nop
-  nop
 ; 0x36ea
 
 SECTION "MiscBankSwaps_25", ROM0[$36EA]
@@ -1162,7 +1098,7 @@ MiscBankSwaps_25:
  ; 36ea (0:36ea)
   push af
   ld a, $1f
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $74d8
   ld b, $00
@@ -1176,8 +1112,6 @@ MiscBankSwaps_25:
   ld bc, $9a01
   call PutString
   ret
-  nop
-  nop
 ; 0x3706
 
 SECTION "MiscBankSwaps_26", ROM0[$3706]
@@ -1195,7 +1129,7 @@ MiscBankSwaps_26:
   ld a, $01
   call $2edb
   ld a, $02
-  rst $10
+  ld [$2000], a
   ld hl, $6827
   ld b, $00
   ld a, [SerIO_ConnectionTestResult]
@@ -1204,7 +1138,7 @@ MiscBankSwaps_26:
   ld a, [hl]
   push af
   ld a, $1f
-  rst $10
+  ld [$2000], a
   pop af
   ld hl, $74d8
   ld b, $00
@@ -1218,15 +1152,11 @@ MiscBankSwaps_26:
   ld bc, $9c41
   call PutString
   ret
-  nop
-  nop
-  nop
-  nop
 ; 0x3745
 
 SECTION "MiscBankSwaps_2C", ROM0[$3752]
 MiscBankSwaps_2C: ; 3752 (0:3752)
-  rst $10
+  ld [$2000], a
   ld hl, $420c
   ld b, $00
   ld a, [$c8f9]
@@ -1255,8 +1185,6 @@ MiscBankSwaps_2C: ; 3752 (0:3752)
   and $0f
   ld [$c935], a
   ret
-  nop
-  nop
 ; 0x3784
 .asm_3784
 
@@ -1264,7 +1192,7 @@ SECTION "MiscBankSwaps_28", ROM0[$388C]
 MiscBankSwaps_28:
  ; 388c (0:388c)
   ld a, $12
-  rst $10
+  ld [$2000], a
   ld a, [$c8f9]
   ld hl, $432c
   ld b, $00
@@ -1273,8 +1201,6 @@ MiscBankSwaps_28:
   ld a, [hl]
   ld [SerIO_ConnectionTestResult], a
   ret
-  nop
-  nop
 ; 0x38a0
 
 SECTION "MiscBankSwaps_29", ROM0[$38A0]
@@ -1302,7 +1228,7 @@ MiscBankSwaps_29:
   call $2edb
   pop de
   ld a, $17
-  rst $10
+  ld [$2000], a
   ld hl, $742c
   ld b, $00
   ld a, [SerIO_ConnectionTestResult]
@@ -1325,8 +1251,6 @@ MiscBankSwaps_29:
   pop de
   pop hl
   ret
-  nop
-  nop
 ; 0x38e7
 
 SECTION "MiscBankSwaps_2A", ROM0[$3A3D]
@@ -1334,7 +1258,7 @@ MiscBankSwaps_2A:
  ; 3a3d (0:3a3d)
   call $283a
   ld a, $1d
-  rst $10
+  ld [$2000], a
   ld a, [$c8f9]
   ld hl, $6400
   ld d, $00
@@ -1356,7 +1280,7 @@ MiscBankSwaps_2A:
   ld l, a
   push hl
   ld a, $1d
-  rst $10
+  ld [$2000], a
   ld a, [hl]
   cp $ff
   jp z, $3afd
@@ -1424,17 +1348,11 @@ MiscBankSwaps_2A:
   ld a, [hl]
   ld c, a
   ld a, $01
-  rst $10
+  ld [$2000], a
   ld a, [$c8b0]
   and $80
   jp z, .asm_3ae4
   pop hl
   jp $3aea
-  nop
-  nop
-  nop
-  nop
-  nop
-  nop
 ; 0x3ae4
 .asm_3ae4
