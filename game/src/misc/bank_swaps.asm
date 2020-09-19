@@ -276,7 +276,7 @@ MiscBankSwaps_08:
 ; 0x2b49
 
 SECTION "MiscBankSwaps_0B", ROM0[$2B7E]
-Func_2b7e:
+MiscBankSwaps_0B:
  ; 2b7e (0:2b7e)
   ld a, $17
   ld [$2000], a
@@ -315,7 +315,7 @@ Func_2b7e:
 ; 0x2bbf
 
 SECTION "MiscBankSwaps_0D", ROM0[$2C03]
-Func_2c03:
+MiscBankSwaps_0D:
  ; 2c03 (0:2c03)
   ld a, $14
   ld [$2000], a
@@ -330,7 +330,7 @@ Func_2c03:
 ; 0x2c1c
 
 SECTION "MiscBankSwaps_0E", ROM0[$2C1C]
-Func_2c1c:
+MiscBankSwaps_0E:
  ; 2c1c (0:2c1c)
   ld a, $17
   ld [$2000], a
@@ -745,7 +745,7 @@ MiscBankSwaps_19:
 ; 0x3279
 
 SECTION "MiscBankSwaps_1A", ROM0[$3279]
-Func_3279:
+MiscBankSwaps_1A:
  ; 3279 (0:3279)
   ld a, $0a
   ld [$2000], a
@@ -755,8 +755,44 @@ Func_3279:
   ret
 ; 0x3288
 
+SECTION "MiscBankSwaps_2B", ROM0[$332e]
+MiscBankSwaps_2B:
+ ; 0x332e
+  push af
+  ld b, $0c
+  add b
+  ld [$2000], a
+  ld b, $00
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  sla c
+  rl b
+  ld hl, $4000
+  add hl, bc
+  ld bc, $100
+  pop af
+  cp $03
+  jr nz, .asm_3366
+  ld bc, $c0
+.asm_3366
+  call CopyVRAMData
+  ret
+; 0x336a
+
 SECTION "MiscBankSwaps_1D", ROM0[$336D]
-Func_336d:
+MiscBankSwaps_1D:
  ; 336d (0:336d)
   ld a, $0b
   ld [$2000], a
@@ -770,7 +806,7 @@ Func_336d:
 ; 0x337f
 
 SECTION "MiscBankSwaps_1E", ROM0[$337F]
-Func_337f:
+MiscBankSwaps_1E:
  ; 337f (0:337f)
   push af
   ld a, $17
@@ -1104,6 +1140,39 @@ MiscBankSwaps_26:
   ret
 ; 0x3745
 
+SECTION "MiscBankSwaps_2C", ROM0[$3752]
+MiscBankSwaps_2C: ; 3752 (0:3752)
+  ld [$2000], a
+  ld hl, $420c
+  ld b, $00
+  ld a, [$c8f9]
+  ld c, a
+  add hl, bc
+  ld a, [hl]
+  push af
+  and $f0
+  swap a
+  ld b, a
+  ld a, [$c939]
+  ld hl, $3784
+  ld d, $00
+  ld e, a
+  add hl, de
+  ld a, [hl]
+  add b
+  ld c, a
+  sub $0b
+  jr c, .asm_3779
+  ld c, $0a
+.asm_3779
+  ld a, c
+  ld [$c934], a
+  pop af
+  and $0f
+  ld [$c935], a
+  ret
+; 0x3784
+
 SECTION "MiscBankSwaps_28", ROM0[$388C]
 MiscBankSwaps_28:
  ; 388c (0:388c)
@@ -1170,7 +1239,7 @@ MiscBankSwaps_29:
 ; 0x38e7
 
 SECTION "MiscBankSwaps_2A", ROM0[$3A3D]
-Func_3a3d:
+MiscBankSwaps_2A:
  ; 3a3d (0:3a3d)
   call $283a
   ld a, $1d
