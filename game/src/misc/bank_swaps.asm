@@ -1,4 +1,5 @@
 ; Uncategorized functions that swap banks
+INCLUDE "game/src/common/constants.asm"
 
 SECTION "MiscBankSwaps_00", ROM0[$2350]
 MiscBankSwaps_00:
@@ -27,11 +28,12 @@ MiscBankSwaps_02:
   ld [SerIO_ConnectionTestResult], a
   ld a, [$c6ce]
   or a
-  jp nz, $29f6
+  jp nz, MiscBankSwaps_04.asm_29f6
   ld a, $01
   ld [$c6ce], a
   xor a
   ld [$c6d6], a
+.asm_296a
   ld a, $0b
   ld [$2000], a
   push bc
@@ -51,9 +53,9 @@ MiscBankSwaps_02:
   pop bc
   ld a, [hl]
   cp $ff
-  jp z, $2a60
+  jp z, MiscBankSwaps_04.asm_2a60
   cp $fe
-  jp nz, $29bf
+  jp nz, .asm_29bf
   inc hl
   ld a, [hl]
   push bc
@@ -77,8 +79,9 @@ MiscBankSwaps_02:
   ld a, [$c6d6]
   inc a
   ld [$c6d6], a
-  jp $296a
+  jp MiscBankSwaps_02.asm_296a
 ; 0x29bf
+.asm_29bf
 
 SECTION "MiscBankSwaps_04", ROM0[$29C3]
 MiscBankSwaps_04:
@@ -112,6 +115,7 @@ MiscBankSwaps_04:
   ld [$c6d2], a
   ld a, [hl]
   ld [$c6d1], a
+.asm_29f6
   ld a, [$c6d3]
   or a
   jr nz, .asm_2a02
@@ -158,12 +162,13 @@ MiscBankSwaps_04:
   ld a, [$c6d5]
   dec a
   ld [$c6d5], a
-  jp nz, $29f6
+  jp nz, MiscBankSwaps_04.asm_29f6
   ld a, [$c6d6]
   inc a
   ld [$c6d6], a
-  jp $296a
+  jp MiscBankSwaps_02.asm_296a
 ; 0x2a60
+.asm_2a60
 
 SECTION "MiscBankSwaps_07", ROM0[$2A65]
 MiscBankSwaps_07:
@@ -174,9 +179,10 @@ MiscBankSwaps_07:
   ld h, a
   ld a, [$c92d]
   ld l, a
+.asm_2a72
   ld a, [hli]
   cp $ff
-  jp z, $2ab3
+  jp z, .asm_2ab3
   ld b, a
   ld a, [SerIO_ConnectionTestResult]
   cp b
@@ -188,7 +194,7 @@ MiscBankSwaps_07:
   inc hl
   inc hl
   inc hl
-  jp $2a72
+  jp .asm_2a72
 .asm_2a89
   ld a, [hli]
   ld b, a
@@ -201,7 +207,7 @@ MiscBankSwaps_07:
   inc hl
   inc hl
   inc hl
-  jp $2a72
+  jp .asm_2a72
 .asm_2a9a
   ld a, [hli]
   ld [SerIO_ConnectionTestResult], a
@@ -217,6 +223,7 @@ MiscBankSwaps_07:
   ld [$c658], a
   ret
 ; 0x2ab3
+.asm_2ab3
 
 SECTION "MiscBankSwaps_08", ROM0[$2AE9]
 MiscBankSwaps_08:
@@ -246,6 +253,7 @@ MiscBankSwaps_08:
   ld h, a
   ld a, [$c930]
   ld l, a
+.asm_2b1b
   ld a, [hli]
   cp $ff
   ret z
@@ -255,7 +263,7 @@ MiscBankSwaps_08:
   jr z, .asm_2b2b
   inc hl
   inc hl
-  jp $2b1b
+  jp .asm_2b1b
 .asm_2b2b
   ld a, [hli]
   ld b, a
@@ -263,7 +271,7 @@ MiscBankSwaps_08:
   cp b
   jr z, .asm_2b37
   inc hl
-  jp $2b1b
+  jp .asm_2b1b
 .asm_2b37
   ld a, [hli]
   ld [$c650], a
@@ -298,7 +306,7 @@ MiscBankSwaps_0B:
   ld l, a
   ld a, [hli]
   or a
-  jp z, $2bbf
+  jp z, .asm_2bbf
   ld [SerIO_ConnectionTestResult], a
   ld a, [hli]
   ld [$c650], a
@@ -313,6 +321,7 @@ MiscBankSwaps_0B:
   ld [$c64f], a
   ret
 ; 0x2bbf
+.asm_2bbf
 
 SECTION "MiscBankSwaps_0D", ROM0[$2C03]
 MiscBankSwaps_0D:
@@ -388,7 +397,7 @@ MiscBankSwaps_10:
   ld c, a
   sla c
   rl b
-  ld hl, $2cbb
+  ld hl, .asm_2cbb
   add hl, bc
   ld a, [hli]
   ld h, [hl]
@@ -417,6 +426,7 @@ MiscBankSwaps_10:
   ld [$c740], a
   ret
 ; 0x2cbb
+.asm_2cbb
 
 SECTION "MiscBankSwaps_11", ROM0[$2D07]
 MiscBankSwaps_11:
@@ -501,7 +511,7 @@ MiscBankSwaps_12:
   inc hl
   inc hl
   inc hl
-  ld de, $c6a2
+  ld de, cBUF01
   ld b, $09
 .asm_2d8c
   ld a, [hli]
@@ -517,7 +527,7 @@ MiscBankSwaps_13:
  ; 2ede (0:2ede)
   ld a, $17
   ld [$2000], a
-  ld hl, $2f11
+  ld hl, .asm_2f11
   ld d, $00
   ld e, b
   sla e
@@ -544,6 +554,7 @@ MiscBankSwaps_13:
   ld a, [hl]
   ld [SerIO_ConnectionTestResult], a
   ret
+ .asm_2f11
 ; 0x2f11
 
 SECTION "MiscBankSwaps_14", ROM0[$2F1C]
@@ -551,7 +562,7 @@ MiscBankSwaps_14:
  ; 2f1c (0:2f1c)
   ld a, $17
   ld [$2000], a
-  ld hl, $2f53
+  ld hl, .asm_2f53
   ld d, $00
   ld e, b
   sla e
@@ -581,12 +592,13 @@ MiscBankSwaps_14:
   ld [SerIO_ConnectionTestResult], a
   ret
 ; 0x2f53
+.asm_2f53
 
 SECTION "MiscBankSwaps_15", ROM0[$2F64]
 MiscBankSwaps_15:
  ; 2f64 (0:2f64)
   ld [$2000], a
-  ld hl, $3020
+  ld hl, .asm_3020
   ld b, $00
   ld a, [$a00e]
   ld c, a
@@ -610,7 +622,7 @@ MiscBankSwaps_15:
   add hl, bc
   ld bc, $986b
   call PutString
-  ld hl, $3020
+  ld hl, .asm_3020
   ld b, $00
   ld a, [$a010]
   ld c, a
@@ -634,7 +646,7 @@ MiscBankSwaps_15:
   add hl, bc
   ld bc, $98ab
   call PutString
-  ld hl, $3020
+  ld hl, .asm_3020
   ld b, $00
   ld a, [$a012]
   ld c, a
@@ -658,7 +670,7 @@ MiscBankSwaps_15:
   add hl, bc
   ld bc, $98eb
   call PutString
-  ld hl, $3020
+  ld hl, .asm_3020
   ld b, $00
   ld a, [$a014]
   ld c, a
@@ -684,6 +696,7 @@ MiscBankSwaps_15:
   call PutString
   ret
 ; 0x3020
+.asm_3020
 
 SECTION "MiscBankSwaps_16", ROM0[$3027]
 MiscBankSwaps_16:
@@ -957,7 +970,7 @@ MiscBankSwaps_22:
   ld a, [hli]
   ld h, [hl]
   ld l, a
-  jp $3687
+  jp .asm_3687
 .asm_3643
   ld hl, $4
   add hl, de
@@ -989,7 +1002,7 @@ MiscBankSwaps_22:
   ld a, [hli]
   ld h, [hl]
   ld l, a
-  jp $3687
+  jp .asm_3687
 .asm_3674
   ld hl, $6
   add hl, de
@@ -1003,6 +1016,7 @@ MiscBankSwaps_22:
   ld a, [hli]
   ld h, [hl]
   ld l, a
+.asm_3687
   ld de, $a084
   ld b, $08
 .asm_368c
@@ -1154,7 +1168,7 @@ MiscBankSwaps_2C: ; 3752 (0:3752)
   swap a
   ld b, a
   ld a, [$c939]
-  ld hl, $3784
+  ld hl, .asm_3784
   ld d, $00
   ld e, a
   add hl, de
@@ -1172,6 +1186,7 @@ MiscBankSwaps_2C: ; 3752 (0:3752)
   ld [$c935], a
   ret
 ; 0x3784
+.asm_3784
 
 SECTION "MiscBankSwaps_28", ROM0[$388C]
 MiscBankSwaps_28:
@@ -1224,7 +1239,7 @@ MiscBankSwaps_29:
   ld a, [hli]
   ld h, [hl]
   ld l, a
-  ld de, $c705
+  ld de, cBUF04
   ld b, $09
 .asm_38dd
   ld a, [hli]
@@ -1336,7 +1351,8 @@ MiscBankSwaps_2A:
   ld [$2000], a
   ld a, [$c8b0]
   and $80
-  jp z, $3ae4
+  jp z, .asm_3ae4
   pop hl
   jp $3aea
 ; 0x3ae4
+.asm_3ae4
