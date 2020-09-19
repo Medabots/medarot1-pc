@@ -1,4 +1,4 @@
-SECTION "Dialog Control Codes", ROM0[$1F43]
+SECTION "Dialog Control Codes", ROM0[$1F61]
 Free:
 .marker
 REPT $20B8 - .marker
