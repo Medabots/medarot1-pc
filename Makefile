@@ -65,7 +65,7 @@ PATCH_TILESET_TEXT := $(TILESET_TEXT)/patch
 PATCH_TILESET_OUT := $(TILESET_OUT)/patch
 
 # Source Modules (directories in SRC)
-MODULES := core gfx data text patch
+MODULES := core gfx data text misc patch
 
 # Toolchain
 CC := rgbasm
