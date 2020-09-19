@@ -1,4 +1,4 @@
-; Misc functions to be categorized, but needed to be dumped
+; Useful utility functions that don't necessarily belong in one place
 INCLUDE "game/src/common/constants.asm"
 
 SECTION "Draw Numbers", ROM0[$3158]
