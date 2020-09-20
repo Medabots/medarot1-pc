@@ -19,12 +19,12 @@ VBlankingIRQ::
   ldh a, [$FF92]
   or a
   jr nz, .setCompletedFlag
-  ld a, [$C600]
+  ld a, [OAMDMAReady]
   or a
   call nz,  $FF80 ; In-memory code: OAM DMA
   ei
   xor a
-  ld [$C600], a
+  ld [OAMDMAReady], a
 
 .setCompletedFlag
   ld a, 1
@@ -169,4 +169,14 @@ SoundFixHack::
   call $4000
   ldh a, [hBank]
   ld [$2000], a
+  ret
+LoadSpritesForDMAHack::
+  ld a, [$C600]
+  or a
+  ret z
+  call $0cdd ; If $0cd8 is ever dumped then symbolise this too.
+  xor a
+  ld [$C600], a
+  inc a
+  ld [OAMDMAReady], a
   ret

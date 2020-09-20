@@ -97,7 +97,7 @@ Main::
   call SerIO_SendConnectPacket
   call $0c1c
   call $38e7
-  call $0cd8
+  call LoadSpritesForDMAHack ; Previously $0cd8
   call $19b3
   ld a, $1
   ld [$c5a1], a
