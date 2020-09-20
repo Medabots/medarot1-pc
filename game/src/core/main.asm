@@ -112,7 +112,9 @@ Main::
   xor a
   ld [$c5a1], a
   jp .gameLoop
-  nop
-  nop
+.end
+REPT $451 - .end
+  db 0
+ENDR
 ; 0x451
 
