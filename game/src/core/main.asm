@@ -91,7 +91,7 @@ Main::
   call $0485
   ld a, [$c5a1]
   or a
-  jr nz, .jpB ; 0x423 $1a
+  jr nz, .waitForNextFrame ; 0x423 $1a
   call SerIO_RecvBufferPull
   call SerIO_SendBufferPush
   call SerIO_SendConnectPacket
@@ -101,8 +101,7 @@ Main::
   call $19b3
   ld a, $1
   ld [$c5a1], a
-.jpB
-  call $0590 ; Audio handling.
+
 .waitForNextFrame
   ldh a, [$ff92]
   and a

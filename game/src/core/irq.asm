@@ -29,7 +29,7 @@ VBlankingIRQ::
 .setCompletedFlag
   ld a, 1
   ldh [$FF92], a
-  call $3B90
+  call SoundFixHack
   pop hl
   pop de
   pop bc
@@ -161,4 +161,12 @@ HBlankWaitForLine::
   ld a, [hRegLY]
   cp b
   jr c, .waitforline
+  ret
+SoundFixHack::
+  call $3B90 ; Original replaced call. Nothing to do with sound.
+  ld a, 6
+  ld [$2000], a ; Don't use rst10 in the IRQ since we'll restore the old bank
+  call $4000
+  ldh a, [hBank]
+  ld [$2000], a
   ret
