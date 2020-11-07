@@ -21,7 +21,7 @@ base_offset = 0
 for input_file in input_files:
     base_name = os.path.basename(input_file)
     output_path = os.path.join(output_bin_dir, base_name)
-    key = os.path.splitext(base_name)[0].rstrip(version_suffix)
+    key = os.path.splitext(base_name)[0].rpartition(f"_{version_suffix}")[0]
     bin_files[key] = output_path
     
     with open(data_file, 'r') as src:
