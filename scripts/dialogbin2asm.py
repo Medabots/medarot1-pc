@@ -49,7 +49,7 @@ with open(output_file, 'w') as output:
         for input_file in input_files:
             base_name = os.path.basename(input_file)
             output_path = os.path.join(output_bin_dir, base_name)
-            key = os.path.splitext(base_name)[0].rstrip(version_suffix)
+            key = os.path.splitext(base_name)[0].rpartition(f"_{version_suffix}")[0]
 
             with open(input_file, 'rb') as in_f, open(output_path, 'wb') as out_f:
                 count = utils.read_short(in_f)
