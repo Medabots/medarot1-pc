@@ -19,7 +19,7 @@ SECTION "WaitLCDController", ROM0[$17E1]
 WaitLCDController:: ; 17E1 (0:17E1)
   push af
 .wfb
-  ld a, [hLCDStat]
+  ldh a, [hLCDStat]
   and 2
   jr nz, .wfb
   pop af

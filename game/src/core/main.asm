@@ -54,19 +54,19 @@ Main::
   call $17ea
   ld a, $83
   ld [$c5a9], a
-  ld [hRegLCDC], a
+  ldh [hRegLCDC], a
   xor a
-  ld [hRegIF], a
+  ldh [hRegIF], a
   ld a, $d
-  ld [hRegIE], a
+  ldh [hRegIE], a
   ei
   call $3c4c
   ld a, $40
-  ld [hLCDStat], a
+  ldh [hLCDStat], a
   xor a
-  ld [hRegIF], a
+  ldh [hRegIF], a
   ld a, $b
-  ld [hRegIE], a
+  ldh [hRegIE], a
   ld a, BANK(SGB_DetectICDPresence)
   ld [$c6e0], a
   rst $10

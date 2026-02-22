@@ -29,7 +29,7 @@ SECTION "rst20",ROM0[$20]
 SECTION "rst28",ROM0[$28] ; hl += a
   add l
   ld l, a
-  ret nc 
+  ret nc
   inc h
   ret
 
