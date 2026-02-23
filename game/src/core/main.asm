@@ -8,8 +8,8 @@ Main::
 
 ; Disable all interrupts
   xor a
-  ld [hRegIF], a
-  ld [hRegIE], a
+  ldh [hRegIF], a
+  ldh [hRegIE], a
   ld sp, $fffe
 
 ; Enable SRAM

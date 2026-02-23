@@ -62,7 +62,7 @@ LCDC_Status_IRQ: ; 4D3 (0:4D3)
   ld hl, $1
   add hl, de
   ld a, [hl]
-  ld [hRegSCX], a
+  ldh [hRegSCX], a
   ld hl, $2
   add hl, de
   ld a, [hl]
@@ -72,7 +72,7 @@ LCDC_Status_IRQ: ; 4D3 (0:4D3)
   ld a, [hl]
   ld b, a
 .asm_509
-  ld a, [hRegLY]
+  ldh a, [hRegLY]
   sub b
   jr c, .asm_509
   ld hl, $3
