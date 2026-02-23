@@ -8,7 +8,7 @@
 	* Currently relies on the rgbds overlay feature as parts are disassembled and tacked on
 * Make
 * Python 3.6 or greater, aliased to 'python3'
-* [rgbds](https://github.com/rednex/rgbds)
+* [rgbds](https://github.com/rednex/rgbds) >= 0.5.0
 
 # Make
 
