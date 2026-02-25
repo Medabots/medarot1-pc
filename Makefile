@@ -121,7 +121,7 @@ default: parts_collection
 all: $(VERSIONS)
 
 clean:
-	rm -r $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
+	rm -rf $(BUILD) $(TARGETS) $(SYM_OUT) $(MAP_OUT) || exit 0
 
 # Support building specific versions
 # Unfortunately make has no real good way to do this dynamically from VERSIONS so we just manually set CURVERSION here to propagate to the rgbasm call

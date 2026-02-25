@@ -4,10 +4,10 @@ Char4F:: ; 1d6b end of text
   ld a, [hl]
   or a
   jp nz, .Char4fMore
-  ld a, [$ff8d]
+  ldh a, [$ff8d]
   and $3
   jr nz, .asm_1d8b
-  ld a, [$ff8c]
+  ldh a, [$ff8c]
   and $3
   jr z, .asm_1d89
   ld a, [$c6c5]
@@ -21,7 +21,7 @@ Char4F:: ; 1d6b end of text
 
 .asm_1d8b
   ld a, $22
-  ld [$ffa1], a
+  ldh [$ffa1], a
   xor a
   ld [$c5c7], a
   ld [$c6c5], a
@@ -47,10 +47,10 @@ Char4F:: ; 1d6b end of text
   ld a, [hl]
   cp $2
   jr nz, .asm_1de4
-  ld a, [$ff8d]
+  ldh a, [$ff8d]
   and $3
   jr nz, .asm_1dd5
-  ld a, [$ff8c]
+  ldh a, [$ff8c]
   and $3
   jr z, .asm_1d89
   ld a, [$c6c5]
@@ -62,7 +62,7 @@ Char4F:: ; 1d6b end of text
   ret
 .asm_1dd5
   ld a, $22
-  ld [$ffa1], a
+  ldh [$ffa1], a
   xor a
   ld [$c6c5], a
   ld a, $1
@@ -73,10 +73,10 @@ Char4F:: ; 1d6b end of text
   ld a, [hl]
   cp $3
   jr nz, .asm_1e1b
-  ld a, [$ff8d]
+  ldh a, [$ff8d]
   and $3
   jr nz, .asm_1e03
-  ld a, [$ff8c]
+  ldh a, [$ff8c]
   and $3
   jr z, .asm_1d89
   ld a, [$c6c5]
@@ -88,7 +88,7 @@ Char4F:: ; 1d6b end of text
   ret
 .asm_1e03
   ld a, $22
-  ld [$ffa1], a
+  ldh [$ffa1], a
   ld b, $1
   ld c, $1
   ld e, $2f
@@ -156,10 +156,10 @@ Char4C::
   call WaitLCDController
   ld [hl], a
   ei
-  ld a, [$ff8d]
+  ldh a, [$ff8d]
   and $3
   jr nz, .asm_1e94
-  ld a, [$ff8c]
+  ldh a, [$ff8c]
   and $3
   ret z
   ld a, [$c6c5]
@@ -170,7 +170,7 @@ Char4C::
   ret
 .asm_1e94
   ld a, $22
-  ld [$ffa1], a
+  ldh [$ffa1], a
   xor a
   ld [$c6c5], a
   ld b, $1

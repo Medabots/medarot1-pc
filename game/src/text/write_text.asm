@@ -160,12 +160,12 @@ WriteChar:: ; 206F
   jp PutCharLoop
 .undumpedtable
 
-hPSTextAddrHi          EQU $c640
-hPSTextAddrLo          EQU $c641
-hPSVRAMAddrHi          EQU $c642
-hPSVRAMAddrLo          EQU $c643
-hPSCurrChar            EQU $c64e
-hPSCurrCharTile        EQU $c64f
+DEF    hPSTextAddrHi          EQU $c640
+DEF    hPSTextAddrLo          EQU $c641
+DEF    hPSVRAMAddrHi          EQU $c642
+DEF    hPSVRAMAddrLo          EQU $c643
+DEF    hPSCurrChar            EQU $c64e
+DEF    hPSCurrCharTile        EQU $c64f
 SECTION "PutString", ROM0[$2D93]
 PutString:: ; 2D93
   ld a, h
